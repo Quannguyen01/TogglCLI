@@ -1,6 +1,6 @@
 export interface TimeEntry {
     id?: number;
-    description: String;
+    description: string;
     wid?: number;
     pid?: number;
     tid?: number;
@@ -9,7 +9,7 @@ export interface TimeEntry {
     stop?: Date;
     duration: number;
     created_with: string;
-    tags?: Array<string>;
+    tags?: string[];
     duronly?: boolean;
     at?: Date;
     uid?: number;
