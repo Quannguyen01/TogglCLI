@@ -10,16 +10,20 @@ const togglClient = new TogglClientApi();
 program.version('0.0.1');
 
 program
-    .command('start <taskName>', 'start a task')
-    .action(async (cmd, taskName) => {
-        const result = await togglClient.start(taskName);
-        if (result.description != null) {
-            console.log(`Task ${taskName} has succesfully started!`);
+    .command('start <taskName>')
+    .description('start a task')
+    .option('-p, --project <projectName>', 'project for the task')
+    .action(async (taskName, cmd) => {
+        if (cmd.project) {
+            const result = await togglClient.start(taskName);
+            if (result.description != null) {
+                console.log(`Task ${taskName} has succesfully started!`);
+            } else {
+                console.log(`Task ${taskName} has failed to start.`);
+            }
         } else {
-            console.log(`Task ${taskName} has failed to start.`);
+            console.log('Please specified a project');
         }
-
-        process.exit(0);
     });
 
 program.parse(process.argv);

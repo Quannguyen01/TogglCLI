@@ -22,9 +22,9 @@ export class TogglClientApi {
     async createEntry(entry: TimeEntry) {
         try {
             const result = await this.request.post('/time_entries', {time_entry: entry});
-            return this.extractEntry(result);
+            return this.extractTimeEntry(result);
         } catch (err) {
-            console.log(err.data);
+            console.log(`${err.status}-${err.statusText}`);
             return {
                 pid: null,
                 description: null,
@@ -41,9 +41,9 @@ export class TogglClientApi {
                 created_with: 'my-toggl-client',
             };
             const result = await this.request.post('/time_entries/start', {time_entry: entry});
-            return this.extractEntry(result);
+            return this.extractTimeEntry(result);
         } catch (err) {
-            console.log(err.data);
+            console.log(`${err.status}-${err.statusText}`);
             return {
                 pid: null,
                 description: null,
@@ -51,7 +51,7 @@ export class TogglClientApi {
         }
     }
 
-    private extractEntry(result: AxiosResponse): TimeEntry {
+    private extractTimeEntry(result: AxiosResponse): TimeEntry {
         return result.data.data;
     }
 }
