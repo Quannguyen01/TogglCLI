@@ -5,9 +5,9 @@ export interface TimeEntry {
     pid?: number;
     tid?: number;
     billable?: boolean;
-    start: Date;
+    start?: Date;
     stop?: Date;
-    duration: number;
+    duration?: number;
     created_with: string;
     tags?: string[];
     duronly?: boolean;

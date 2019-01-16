@@ -1,5 +1,8 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { TimeEntry } from './model/TimeEntry';
+import { Project } from './model/Project';
+
+const WORKSPACE_ID = 2513188;
 
 export class TogglClientApi {
     private apiKey: string;
@@ -22,7 +25,7 @@ export class TogglClientApi {
     async createEntry(entry: TimeEntry) {
         try {
             const result = await this.request.post('/time_entries', {time_entry: entry});
-            return this.extractTimeEntry(result);
+            return this.extractData<TimeEntry>(result);
         } catch (err) {
             console.log(`${err.status}-${err.statusText}`);
             return {
@@ -33,17 +36,21 @@ export class TogglClientApi {
 
     }
 
-    async start(taskName: string) {
+    async start(taskName: string, projectName: string) {
         try {
-            const entry = {
-                description: taskName,
-                pid: 148757817,
-                created_with: 'my-toggl-client',
-            };
-            const result = await this.request.post('/time_entries/start', {time_entry: entry});
-            return this.extractTimeEntry(result);
+            const pid = await this.findProjectId(projectName);
+
+            if (pid) {
+                const entry = {
+                    description: taskName,
+                    pid: pid,
+                    created_with: 'my-toggl-client',
+                };
+                return await this.startEntry(entry);
+            }
+            throw new Error('Cannnot start a new task');
         } catch (err) {
-            console.log(`${err.status}-${err.statusText}`);
+            this.publishError(err);
             return {
                 pid: null,
                 description: null,
@@ -51,7 +58,45 @@ export class TogglClientApi {
         }
     }
 
-    private extractTimeEntry(result: AxiosResponse): TimeEntry {
-        return result.data.data;
+    private async startEntry(entry: TimeEntry) {
+        const result = await this.request.post('/time_entries/start', {time_entry: entry});
+        return this.extractData<TimeEntry>(result);
+    }
+
+    async findProjectId(projectName: string) {
+        try {
+            const response = await this.request.get(`/workspaces/${WORKSPACE_ID}/projects`);
+            const projects = this.extractDataArray<Project>(response);
+            const t = projects.find(p => p.name == 'Toggl CLI');
+            if (projects) {
+                const project = projects.find(project => project.name == projectName) as Project
+                if (project) {
+                    return project.id;
+                }
+                else {
+                    throw new Error('Project not found!');
+                }
+            }
+            throw new Error('Namespace not found');
+        } catch (err) {
+            this.publishError(err);
+            return null;
+        }
+    }
+
+    private extractDataArray<T>(result: AxiosResponse) {
+        return result.data as T[];
+    }
+
+    private extractData<T>(result: AxiosResponse) {
+        return result.data.data as T;
+    }
+
+    private publishError(error: any) {
+        if (<AxiosResponse>error.response != undefined)
+            console.log(`${error.status}-${error.statusText}`)
+        else if (error instanceof Error) {
+            console.log(`${error.message}`)
+        }
     }
 }

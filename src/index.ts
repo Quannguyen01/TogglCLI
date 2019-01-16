@@ -15,7 +15,7 @@ program
     .option('-p, --project <projectName>', 'project for the task')
     .action(async (taskName, cmd) => {
         if (cmd.project) {
-            const result = await togglClient.start(taskName);
+            const result = await togglClient.start(taskName, cmd.project);
             if (result.description != null) {
                 console.log(`Task ${taskName} has succesfully started!`);
             } else {

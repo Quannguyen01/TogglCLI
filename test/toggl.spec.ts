@@ -4,12 +4,16 @@ import { startUp } from '../src/startup';
 import { expect } from 'chai';
 
 describe('Toggl', () => {
+    let toggl: TogglClientApi;
     before(() => {
         startUp();
     });
 
+    beforeEach(() => {
+        toggl = new TogglClientApi();
+    });
+
     it('should create a time entry using toggl client api', async () => {
-        let toggl = new TogglClientApi();
         let entry: TimeEntry = {
             description: "Meeting with possible client",
             tags: ["billed"],
@@ -20,15 +24,19 @@ describe('Toggl', () => {
         };
         
         let result = await toggl.createEntry(entry);
-        console.log(result);
         expect(result.pid).to.not.be.null;
         expect(result.description).to.equal(entry.description);
     });
 
     it('should start a toggl entry and return a successful object', async () => {
-        let toggl = new TogglClientApi();
-        let result = await toggl.start("Test adding new entry");
+        let result = await toggl.start('Test adding new entry', 'Toggl CLI');
         expect(result.pid).to.not.be.null;
-        expect(result.description).to.equal("Test adding new entry");
+        expect(result.description).to.equal('Test adding new entry');
+    });
+
+    it('should find a toggl project with specified project name', async() => {
+        let result = await toggl.findProjectId('Toggl CLI');
+        expect(result).to.not.be.null;
+        expect(result).to.not.be.undefined;
     });
 });
