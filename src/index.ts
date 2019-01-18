@@ -29,7 +29,7 @@ program
 program
     .command('stop')
     .description('stop current task')
-    .action(async() => {
+    .action(async () => {
         const result = await toggl.stop();
         if (result) {
             console.log('Current task stopped succesfully');

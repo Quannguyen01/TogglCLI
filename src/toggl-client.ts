@@ -51,11 +51,10 @@ export class TogglClientApi {
             const response = await this.request.get(`/workspaces/${WORKSPACE_ID}/projects`);
             const projects = this.extractDataArray<Project>(response);
             if (projects) {
-                const project = projects.find(project => project.name == projectName) as Project
-                if (project) {
-                    return project.id;
-                }
-                else {
+                const proj = projects.find((p) => p.name === projectName) as Project;
+                if (proj) {
+                    return proj.id;
+                } else {
                     throw new Error('Project not found!');
                 }
             }
@@ -95,10 +94,10 @@ export class TogglClientApi {
     }
 
     private publishError(error: any) {
-        if (error.response)
-            console.log(`${error.response.status}-${error.response.statusText}`)
-        else if (error instanceof Error) {
-            console.log(`${error.message}`)
+        if (error.response) {
+            console.log(`${error.response.status}-${error.response.statusText}`);
+        } else if (error instanceof Error) {
+            console.log(`${error.message}`);
         }
     }
 }

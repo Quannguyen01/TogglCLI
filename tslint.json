@@ -10,7 +10,8 @@
         "interface-name": false,
         "object-literal-sort-keys": false,
         "member-access": false,
-        "no-string-literal": false
+        "no-string-literal": false,
+        "ordered-imports": false
     },
     "rulesDirectory": []
 }

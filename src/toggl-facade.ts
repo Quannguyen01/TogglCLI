@@ -1,11 +1,10 @@
 import { TogglClientApi } from './toggl-client';
-import { TimeEntry } from './model/TimeEntry';
 
 export class TogglFacade {
     private client: TogglClientApi;
 
     constructor() {
-        this.client = new TogglClientApi()
+        this.client = new TogglClientApi();
     }
 
     async start(taskName: string, projectName: string) {
@@ -15,13 +14,13 @@ export class TogglFacade {
             if (pid) {
                 const result = await this.client.startEntry({
                     description: taskName,
-                    pid: pid,
+                    pid,
                     created_with: 'my-toggl-client',
                 });
 
-                if (!result)
+                if (!result) {
                     throw new Error('Cannot start a new task');
-                else {
+                } else {
                     return result;
                 }
             }
@@ -40,7 +39,7 @@ export class TogglFacade {
             const currentTask = await this.client.getCurrent();
 
             if (currentTask && currentTask.id) {
-                const stopTask = await this.client.stopEntry(currentTask.id)
+                const stopTask = await this.client.stopEntry(currentTask.id);
                 if (stopTask) {
                     return true;
                 } else {
