@@ -36,38 +36,20 @@ export class TogglClientApi {
 
     }
 
-    async start(taskName: string, projectName: string) {
+    async startEntry(entry: TimeEntry) {
         try {
-            const pid = await this.findProjectId(projectName);
-
-            if (pid) {
-                const entry = {
-                    description: taskName,
-                    pid: pid,
-                    created_with: 'my-toggl-client',
-                };
-                return await this.startEntry(entry);
-            }
-            throw new Error('Cannnot start a new task');
+            const result = await this.request.post('/time_entries/start', {time_entry: entry});
+            return this.extractData<TimeEntry>(result);
         } catch (err) {
             this.publishError(err);
-            return {
-                pid: null,
-                description: null,
-            };
+            return null;
         }
-    }
-
-    private async startEntry(entry: TimeEntry) {
-        const result = await this.request.post('/time_entries/start', {time_entry: entry});
-        return this.extractData<TimeEntry>(result);
     }
 
     async findProjectId(projectName: string) {
         try {
             const response = await this.request.get(`/workspaces/${WORKSPACE_ID}/projects`);
             const projects = this.extractDataArray<Project>(response);
-            const t = projects.find(p => p.name == 'Toggl CLI');
             if (projects) {
                 const project = projects.find(project => project.name == projectName) as Project
                 if (project) {
@@ -84,6 +66,26 @@ export class TogglClientApi {
         }
     }
 
+    async getCurrent() {
+        try {
+            const response = await this.request.get('/time_entries/current');
+            return this.extractData<TimeEntry>(response);
+        } catch (err) {
+            this.publishError(err);
+            return null;
+        }
+    }
+
+    async stopEntry(timeEntryId: number) {
+        try {
+            const response = await this.request.put(`/time_entries/${timeEntryId}/stop`);
+            return this.extractData<TimeEntry>(response);
+        } catch (err) {
+            this.publishError(err);
+            return null;
+        }
+    }
+
     private extractDataArray<T>(result: AxiosResponse) {
         return result.data as T[];
     }
@@ -93,8 +95,8 @@ export class TogglClientApi {
     }
 
     private publishError(error: any) {
-        if (<AxiosResponse>error.response != undefined)
-            console.log(`${error.status}-${error.statusText}`)
+        if (error.response)
+            console.log(`${error.response.status}-${error.response.statusText}`)
         else if (error instanceof Error) {
             console.log(`${error.message}`)
         }
