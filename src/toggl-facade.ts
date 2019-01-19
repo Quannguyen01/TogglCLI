@@ -34,14 +34,14 @@ export class TogglFacade {
         }
     }
 
-    async stop(): Promise<boolean> {
+    async stop() {
         try {
             const currentTask = await this.client.getCurrent();
 
             if (currentTask && currentTask.id) {
                 const stopTask = await this.client.stopEntry(currentTask.id);
                 if (stopTask) {
-                    return true;
+                    return stopTask.duration;
                 } else {
                     throw new Error('Cannot stop current task');
                 }
@@ -50,7 +50,7 @@ export class TogglFacade {
             }
         } catch (err) {
             console.log(err.message);
-            return false;
+            return 0;
         }
     }
 }

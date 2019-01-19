@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { startUp } from './startup';
 import { TogglFacade } from './toggl-facade';
+import { makePrettyTimeDuration } from './utils';
 
 startUp();
 
@@ -32,7 +33,7 @@ program
     .action(async () => {
         const result = await toggl.stop();
         if (result) {
-            console.log('Current task stopped succesfully');
+            console.log(`Current task stopped succesfully!\nTask duration: ${makePrettyTimeDuration(result)}`);
         } else {
             console.log('Failed to stop task');
         }
