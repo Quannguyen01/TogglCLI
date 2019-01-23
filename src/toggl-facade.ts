@@ -53,4 +53,27 @@ export class TogglFacade {
             return 0;
         }
     }
+
+    async current() {
+        try {
+            const MILISECOND = 1000;
+            const currentTask = await this.client.getCurrent();
+
+            if (currentTask && currentTask.at && currentTask.start) {
+                const duration = ((new Date()).getTime() - (new Date(currentTask.start)).getTime())/MILISECOND;
+                return {
+                    description: currentTask.description,
+                    duration: duration
+                };
+            } else {
+                throw new Error('Cannot get current task');
+            }
+        } catch (err) {
+            console.log(err.message);
+            return {
+                description: null,
+                duration: null
+            };
+        }
+    }
 }
