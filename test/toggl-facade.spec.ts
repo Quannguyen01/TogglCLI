@@ -39,7 +39,7 @@ describe('Toggl Facade test', function() {
 
         expect(result.duration).is.not.null;
         if (result.duration)
-            expect(Math.round(result.duration)).to.equal(2);
+            expect(Math.trunc(result.duration)).to.equal(2);
         expect(result.description).to.equal('Testing current entry');
     });
 });

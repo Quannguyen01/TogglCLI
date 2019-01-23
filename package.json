@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test-all": "npm run test test/**/*.spec.ts",
+    "test": "mocha -r ts-node/register",
     "lint": "tslint src/**/*.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/yaml": "^1.0.1",
     "axios": "^0.18.0",
     "commander": "^2.19.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "yaml": "^1.2.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

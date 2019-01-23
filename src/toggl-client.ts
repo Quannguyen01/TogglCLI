@@ -1,6 +1,7 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { TimeEntry } from './model/TimeEntry';
 import { Project } from './model/Project';
+import { ConfigManager } from './config-manager';
 
 const WORKSPACE_ID = 2513188;
 
@@ -9,7 +10,7 @@ export class TogglClientApi {
     private request: AxiosInstance;
 
     constructor() {
-        this.apiKey = process.env['API_KEY'] as string;
+        this.apiKey = ConfigManager.getValue('api_key') as string;
         this.request = Axios.create({
             baseURL: 'https://www.toggl.com/api/v8',
             headers: {
