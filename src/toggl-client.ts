@@ -52,7 +52,7 @@ export class TogglClientApi implements IClientAPI {
 
     async findProjectId(projectName: string) {
         try {
-            const response = await this.request.get(`/workspaces/${WORKSPACE_ID}/projects`);
+            const response = await this.request.get(`/workspaces/${this.configManager.getValue('WORKSPACE_ID')}/projects`);
             const projects = this.extractDataArray<Project>(response);
             if (projects) {
                 const proj = projects.find((p) => p.name === projectName) as Project;

@@ -2,14 +2,13 @@ import { TogglClientApi } from '../../src/toggl-client';
 import { TimeEntry } from '../../src/model/TimeEntry';
 import { expect } from 'chai';
 import { MockConfig } from '../mock_objects/mock-config';
-
-const PROJECT_TEST_ID = 148757817;
-const APP_NAME = 'my-toggl-client';
+import { IConfigManager } from '../../src/interface/IConfigManager';
 
 describe('Toggl API Testing', function() {
     let toggl: TogglClientApi;
+    let mockConfig: IConfigManager;
     before(function() {
-        const mockConfig = new MockConfig();
+        mockConfig = new MockConfig();
         toggl = new TogglClientApi(mockConfig);
     });
 
@@ -19,8 +18,8 @@ describe('Toggl API Testing', function() {
             tags: ['billed'],
             duration: 1200,
             start: new Date('2013-03-05T07:58:58.000Z'),
-            pid: PROJECT_TEST_ID,
-            created_with: APP_NAME
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID') || '0'),
+            created_with: mockConfig.getValue('APP_NAME') || ''
         };
         
         let result = await toggl.createEntry(entry);
@@ -39,8 +38,8 @@ describe('Toggl API Testing', function() {
         let entry: TimeEntry = {
             description: 'Testing starting time entry from Toggl client',
             tags: ['dev'],
-            pid: PROJECT_TEST_ID,
-            created_with: APP_NAME
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID') || '0'),
+            created_with: mockConfig.getValue('APP_NAME') || ''
         };
 
         let result = await toggl.startEntry(entry);
@@ -53,8 +52,8 @@ describe('Toggl API Testing', function() {
     it('should get the current running entry from toggl', async function() {
         await toggl.startEntry({
             description: 'Testing adding new entry to get current',
-            pid: PROJECT_TEST_ID,
-            created_with: APP_NAME
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID') || '0'),
+            created_with: mockConfig.getValue('APP_NAME') || ''
         });
 
         let result = await toggl.getCurrent();
@@ -68,8 +67,8 @@ describe('Toggl API Testing', function() {
     it('should stop the current running entry in toggl', async function() {
         let runningEntry = await toggl.startEntry({
             description: 'Testing adding new entry to stop',
-            pid: PROJECT_TEST_ID,
-            created_with: APP_NAME
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID') || '0'),
+            created_with: mockConfig.getValue('APP_NAME') || ''
         });
 
         let entryId = runningEntry && runningEntry.id ? runningEntry.id : -1;

@@ -1,16 +1,17 @@
 import { TogglFacade } from "../../src/toggl-facade";
 import { expect } from "chai";
-import { MockConfig } from "../mock_objects/mock-config";
+import { IConfigManager } from "../../src/interface/IConfigManager";
+import { ConfigManager } from "../../src/config-manager";
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 describe('Toggl Facade intergration test', function() {
-    let config: MockConfig;
+    let config: IConfigManager;
 
     before(function() {
-        config = new MockConfig();
+        config = ConfigManager.initialize('test.yml');
     });
 
     it('should start a toggl entry and return a successful object', async function() {
