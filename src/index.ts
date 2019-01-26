@@ -43,11 +43,11 @@ program
     .description('get current running task')
     .action(async () => {
         const result = await toggl.current();
-        if(result.description && result.duration) {
+        if (result.description && result.duration) {
             console.log(`Current task: ${result.description}\nDuration: ${makePrettyTimeDuration(result.duration)}`);
         } else {
             console.log('Failed to get current');
         }
-    })
+    });
 
 program.parse(process.argv);

@@ -1,3 +1,3 @@
 export interface IConfigManager {
-    getValue(name: string): any
+    getValue(name: string): any;
 }

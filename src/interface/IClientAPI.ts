@@ -1,4 +1,4 @@
-import { TimeEntry } from "../model/TimeEntry";
+import { TimeEntry } from '../model/TimeEntry';
 
 export interface IClientAPI {
     createEntry(entry: TimeEntry): Promise<any>;

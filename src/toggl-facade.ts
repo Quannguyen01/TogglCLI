@@ -61,10 +61,10 @@ export class TogglFacade {
             const currentTask = await this.client.getCurrent();
 
             if (currentTask && currentTask.at && currentTask.start) {
-                const duration = ((new Date()).getTime() - (new Date(currentTask.start)).getTime())/MILISECOND;
+                const duration = ((new Date()).getTime() - (new Date(currentTask.start)).getTime()) / MILISECOND;
                 return {
                     description: currentTask.description,
-                    duration: duration
+                    duration,
                 };
             } else {
                 throw new Error('Cannot get current task');
@@ -73,7 +73,7 @@ export class TogglFacade {
             console.log(err.message);
             return {
                 description: null,
-                duration: null
+                duration: null,
             };
         }
     }
