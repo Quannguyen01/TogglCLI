@@ -1,16 +1,19 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { TimeEntry } from './model/TimeEntry';
 import { Project } from './model/Project';
-import { ConfigManager } from './config-manager';
+import { IClientAPI } from './interface/IClientAPI';
+import { IConfigManager } from './interface/IConfigManager';
 
 const WORKSPACE_ID = 2513188;
 
-export class TogglClientApi {
+export class TogglClientApi implements IClientAPI {
     private apiKey: string;
     private request: AxiosInstance;
+    private configManager: IConfigManager;
 
-    constructor() {
-        this.apiKey = ConfigManager.getValue('api_key') as string;
+    constructor(configManager: IConfigManager) {
+        this.configManager = configManager;
+        this.apiKey = configManager.getValue('api_key') as string;
         this.request = Axios.create({
             baseURL: 'https://www.toggl.com/api/v8',
             headers: {

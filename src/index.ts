@@ -2,11 +2,13 @@ import { Command } from 'commander';
 import { startUp } from './startup';
 import { TogglFacade } from './toggl-facade';
 import { makePrettyTimeDuration } from './utils';
+import { ConfigManager } from './config-manager';
 
 startUp();
 
 const program = new Command();
-const toggl = new TogglFacade();
+const configManager = ConfigManager.initialize();
+const toggl = new TogglFacade(configManager);
 
 program.version('0.0.1');
 

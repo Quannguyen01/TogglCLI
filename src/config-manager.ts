@@ -1,28 +1,29 @@
 import { readFileSync } from 'fs';
 import { parseDocument } from 'yaml';
+import { IConfigManager } from './interface/IConfigManager';
 
-export class ConfigManager {
-    private static PATH = 'test.yml';
-    private static configValues: Map<string, any>;
+export class ConfigManager implements IConfigManager {
+    private configValues: Map<string, any>;
+
+    private constructor(configValues: Map<string, any>) {
+        this.configValues = configValues;
+    }
 
     static initialize(configPath: string = '') {
-        
-        if (configPath && configPath != '') {
-            this.PATH = configPath;
-        }
-
-        const file = readFileSync(this.PATH, 'utf8');
+        const file = readFileSync(configPath, 'utf8');
         const doc = parseDocument(file);
 
-        this.configValues = new Map<string, any>();
+        const configValues = new Map<string, any>();
         if (doc.contents) {
             let contentJSON = doc.contents.toJSON();
             for (let key in contentJSON)
-                this.configValues.set(key, contentJSON[key]);
+                configValues.set(key, contentJSON[key]);
         }
+
+        return new ConfigManager(configValues);
     }
 
-    static getValue(name: string) {
+    getValue(name: string) {
         if (this.configValues.has(name))
             return this.configValues.get(name);
         else

@@ -1,10 +1,11 @@
 import { TogglClientApi } from './toggl-client';
+import { IConfigManager } from './interface/IConfigManager';
 
 export class TogglFacade {
     private client: TogglClientApi;
 
-    constructor() {
-        this.client = new TogglClientApi();
+    constructor(configManager: IConfigManager) {
+        this.client = new TogglClientApi(configManager);
     }
 
     async start(taskName: string, projectName: string) {
