@@ -4,8 +4,6 @@ import { Project } from './model/Project';
 import { IClientAPI } from './interface/IClientAPI';
 import { IConfigManager } from './interface/IConfigManager';
 
-const WORKSPACE_ID = 2513188;
-
 export class TogglClientApi implements IClientAPI {
     private apiKey: string;
     private request: AxiosInstance;
