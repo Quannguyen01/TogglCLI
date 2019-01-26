@@ -13,7 +13,7 @@ export class TogglClientApi implements IClientAPI {
 
     constructor(configManager: IConfigManager) {
         this.configManager = configManager;
-        this.apiKey = configManager.getValue('api_key') as string;
+        this.apiKey = this.configManager.getValue('API_KEY') as string;
         this.request = Axios.create({
             baseURL: 'https://www.toggl.com/api/v8',
             headers: {

@@ -1,13 +1,10 @@
 import { Command } from 'commander';
-import { startUp } from './startup';
 import { TogglFacade } from './toggl-facade';
 import { makePrettyTimeDuration } from './utils';
 import { ConfigManager } from './config-manager';
 
-startUp();
-
 const program = new Command();
-const configManager = ConfigManager.initialize();
+const configManager = ConfigManager.initialize('test.yml');
 const toggl = new TogglFacade(configManager);
 
 program.version('0.0.1');

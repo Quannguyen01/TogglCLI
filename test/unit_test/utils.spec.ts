@@ -1,4 +1,4 @@
-import { makePrettyTimeDuration } from "../src/utils";
+import { makePrettyTimeDuration } from "../../src/utils";
 import { expect } from "chai";
 
 describe('utility test', function() {

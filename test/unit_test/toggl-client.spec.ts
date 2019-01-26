@@ -1,7 +1,7 @@
-import { TogglClientApi } from '../src/toggl-client';
-import { TimeEntry } from '../src/model/TimeEntry';
-import { startUp } from '../src/startup';
+import { TogglClientApi } from '../../src/toggl-client';
+import { TimeEntry } from '../../src/model/TimeEntry';
 import { expect } from 'chai';
+import { MockConfig } from '../mock_objects/mock-config';
 
 const PROJECT_TEST_ID = 148757817;
 const APP_NAME = 'my-toggl-client';
@@ -9,11 +9,8 @@ const APP_NAME = 'my-toggl-client';
 describe('Toggl API Testing', function() {
     let toggl: TogglClientApi;
     before(function() {
-        startUp();
-    });
-
-    beforeEach(function() {
-        toggl = new TogglClientApi();
+        const mockConfig = new MockConfig();
+        toggl = new TogglClientApi(mockConfig);
     });
 
     it('should create a time entry using toggl client api', async function() {
