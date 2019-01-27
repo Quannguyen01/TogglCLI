@@ -18,4 +18,14 @@ describe('configuration manager', function() {
         expect(typeof workspaceid).to.equal('number');
         expect(workspaceid).to.be.greaterThan(0);
     });
+
+    it('should store the value to the config file', function() {
+        config.setValue('API_KEY', 'testing');
+        let apiKey = config.getValue('API_KEY');
+        expect(apiKey).equals('testing');
+
+        config = ConfigManager.initialize('test.yml');
+        apiKey = config.getValue('API_KEY');
+        expect(apiKey).equals('testing');
+    });
 });

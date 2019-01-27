@@ -9,4 +9,8 @@ export class MockConfig implements IConfigManager{
     getValue(name: string) {
         return process.env[name];
     }
+
+    setValue(name: string, value: any) {
+        process.env[name] = value;
+    }
 }

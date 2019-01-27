@@ -4,7 +4,7 @@ import { makePrettyTimeDuration } from './utils';
 import { ConfigManager } from './config-manager';
 
 const program = new Command();
-const configManager = ConfigManager.initialize('test.yml');
+const configManager = ConfigManager.initialize('config.yml');
 const toggl = new TogglFacade(configManager);
 
 program.version('0.0.1');

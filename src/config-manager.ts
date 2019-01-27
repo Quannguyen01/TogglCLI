@@ -1,5 +1,5 @@
-import { readFileSync } from 'fs';
-import { parseDocument } from 'yaml';
+import { readFileSync, writeFileSync } from 'fs';
+import { parseDocument, stringify } from 'yaml';
 import { IConfigManager } from './interface/IConfigManager';
 
 export class ConfigManager implements IConfigManager {
@@ -10,18 +10,22 @@ export class ConfigManager implements IConfigManager {
         const configValues = new Map<string, any>();
         if (doc.contents) {
             const contentJSON = doc.contents.toJSON();
-            for (const key of contentJSON) {
-                configValues.set(key, contentJSON[key]);
+            for (const key in contentJSON) {
+                if (contentJSON.hasOwnProperty(key)) {
+                    configValues.set(key, contentJSON[key]);
+                }
             }
         }
 
-        return new ConfigManager(configValues);
+        return new ConfigManager(configValues, configPath);
     }
 
     private configValues: Map<string, any>;
+    private configPath: string;
 
-    private constructor(configValues: Map<string, any>) {
+    private constructor(configValues: Map<string, any>, configPath: string) {
         this.configValues = configValues;
+        this.configPath = configPath;
     }
 
     getValue(name: string) {
@@ -30,5 +34,10 @@ export class ConfigManager implements IConfigManager {
         } else {
             return null;
         }
+    }
+
+    setValue(name: string, value: any): void {
+        this.configValues.set(name, value);
+        writeFileSync(this.configPath, stringify(this.configValues), 'utf8');
     }
 }

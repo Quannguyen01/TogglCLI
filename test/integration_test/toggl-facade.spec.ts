@@ -11,7 +11,7 @@ describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
 
     before(function() {
-        config = ConfigManager.initialize('test.yml');
+        config = ConfigManager.initialize('config.yml');
     });
 
     it('should start a toggl entry and return a successful object', async function() {
