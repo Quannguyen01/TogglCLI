@@ -69,7 +69,7 @@ export class TogglFacade {
                     duration,
                 };
             } else {
-                throw new Error('Cannot get current task');
+                throw new Error('No current task is found!');
             }
         } catch (err) {
             console.log(err.message);
