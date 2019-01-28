@@ -5,28 +5,15 @@ import { IClientAPI } from './interface/IClientAPI';
 import { IConfigManager } from './interface/IConfigManager';
 
 export class TogglClientApi implements IClientAPI {
-    private apiKey: string;
-    private request: AxiosInstance;
     private configManager: IConfigManager;
 
     constructor(configManager: IConfigManager) {
         this.configManager = configManager;
-        this.apiKey = this.configManager.getValue('API_KEY') as string;
-        this.request = Axios.create({
-            baseURL: 'https://www.toggl.com/api/v8',
-            headers: {
-                'Content-Type': 'application-json',
-            },
-            auth: {
-                username: this.apiKey,
-                password: 'api_token',
-            },
-        });
     }
 
     async createEntry(entry: TimeEntry) {
         try {
-            const result = await this.request.post('/time_entries', {time_entry: entry});
+            const result = await this.createRequest().post('/time_entries', {time_entry: entry});
             return this.extractData<TimeEntry>(result);
         } catch (err) {
             console.log(`${err.status}-${err.statusText}`);
@@ -40,7 +27,7 @@ export class TogglClientApi implements IClientAPI {
 
     async startEntry(entry: TimeEntry) {
         try {
-            const result = await this.request.post('/time_entries/start', {time_entry: entry});
+            const result = await this.createRequest().post('/time_entries/start', {time_entry: entry});
             return this.extractData<TimeEntry>(result);
         } catch (err) {
             this.publishError(err);
@@ -51,7 +38,7 @@ export class TogglClientApi implements IClientAPI {
     async findProjectId(projectName: string) {
         try {
             const workspaceId = this.configManager.getValue('WORKSPACE_ID');
-            const response = await this.request.get(`/workspaces/${workspaceId}/projects`);
+            const response = await this.createRequest().get(`/workspaces/${workspaceId}/projects`);
             const projects = this.extractDataArray<Project>(response);
             if (projects) {
                 const proj = projects.find((p) => p.name === projectName) as Project;
@@ -70,7 +57,7 @@ export class TogglClientApi implements IClientAPI {
 
     async getCurrent() {
         try {
-            const response = await this.request.get('/time_entries/current');
+            const response = await this.createRequest().get('/time_entries/current');
             return this.extractData<TimeEntry>(response);
         } catch (err) {
             this.publishError(err);
@@ -80,7 +67,7 @@ export class TogglClientApi implements IClientAPI {
 
     async stopEntry(timeEntryId: number) {
         try {
-            const response = await this.request.put(`/time_entries/${timeEntryId}/stop`);
+            const response = await this.createRequest().put(`/time_entries/${timeEntryId}/stop`);
             return this.extractData<TimeEntry>(response);
         } catch (err) {
             this.publishError(err);
@@ -102,5 +89,19 @@ export class TogglClientApi implements IClientAPI {
         } else if (error instanceof Error) {
             console.log(`${error.message}`);
         }
+    }
+
+    private createRequest() : AxiosInstance {
+        const apiKey = this.configManager.getValue('API_KEY') as string;
+        return Axios.create({
+            baseURL: 'https://www.toggl.com/api/v8',
+            headers: {
+                'Content-Type': 'application-json',
+            },
+            auth: {
+                username: apiKey,
+                password: 'api_token',
+            },
+        });
     }
 }
