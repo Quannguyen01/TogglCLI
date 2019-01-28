@@ -1,10 +1,10 @@
-import { TogglFacade } from "../../src/toggl-facade";
-import { expect } from "chai";
-import { IConfigManager } from "../../src/interface/IConfigManager";
-import { ConfigManager } from "../../src/config-manager";
+import { TogglFacade } from '../../src/toggl-facade';
+import { expect } from 'chai';
+import { IConfigManager } from '../../src/interface/IConfigManager';
+import { ConfigManager } from '../../src/config-manager';
 
 function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 describe('Toggl Facade intergration test', function() {
@@ -15,7 +15,7 @@ describe('Toggl Facade intergration test', function() {
     });
 
     it('should start a toggl entry and return a successful object', async function() {
-        let result = await (new TogglFacade(config)).start('Test adding new facade entry', 'Toggl CLI');
+        const result = await (new TogglFacade(config)).start('Test adding new facade entry', 'Toggl CLI');
         expect(result.description).to.equal('Test adding new facade entry');
     });
 
@@ -27,7 +27,7 @@ describe('Toggl Facade intergration test', function() {
 
         await sleep(2000);
 
-        let result = await toggl.stop();
+        const result = await toggl.stop();
         expect(result).to.greaterThan(0);
     });
 
@@ -38,11 +38,11 @@ describe('Toggl Facade intergration test', function() {
         await toggl.start('Testing current entry', 'Toggl CLI');
         await sleep(2000);
 
-        let result = await toggl.current();
+        const result = await toggl.current();
 
         expect(result.duration).is.not.null;
         if (result.duration) {
-            expect(result.duration < 4 && 
+            expect(result.duration < 4 &&
                 result.duration >= 2).to.be.true;
         }
         expect(result.description).to.equal('Testing current entry');

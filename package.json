@@ -6,7 +6,7 @@
   "scripts": {
     "test-all": "npm run test test/**/*.spec.ts",
     "test": "mocha -r ts-node/register",
-    "lint": "tslint src/**/*.ts"
+    "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'"
   },
   "author": "",
   "license": "ISC",

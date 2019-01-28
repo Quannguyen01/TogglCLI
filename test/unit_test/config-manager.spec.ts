@@ -1,9 +1,9 @@
-import { expect } from "chai";
-import { ConfigManager } from "../../src/config-manager";
-import { IConfigManager } from "../../src/interface/IConfigManager";
+import { expect } from 'chai';
+import { ConfigManager } from '../../src/config-manager';
+import { IConfigManager } from '../../src/interface/IConfigManager';
 
 describe('configuration manager', function() {
-    let config : IConfigManager;
+    let config: IConfigManager;
     before(function() {
         config = ConfigManager.initialize('test.yml');
     });
