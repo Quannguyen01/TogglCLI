@@ -16,7 +16,7 @@ export class TogglClientApi implements IClientAPI {
             const result = await this.createRequest().post('/time_entries', {time_entry: entry});
             return this.extractData<TimeEntry>(result);
         } catch (err) {
-            console.log(`${err.status}-${err.statusText}`);
+            this.publishError(err);
             return {
                 pid: null,
                 description: null,
@@ -93,15 +93,20 @@ export class TogglClientApi implements IClientAPI {
 
     private createRequest() : AxiosInstance {
         const apiKey = this.configManager.getValue('API_KEY') as string;
-        return Axios.create({
-            baseURL: 'https://www.toggl.com/api/v8',
-            headers: {
-                'Content-Type': 'application-json',
-            },
-            auth: {
-                username: apiKey,
-                password: 'api_token',
-            },
-        });
+
+        if (apiKey) {
+            return Axios.create({
+                baseURL: 'https://www.toggl.com/api/v8',
+                headers: {
+                    'Content-Type': 'application-json',
+                },
+                auth: {
+                    username: apiKey,
+                    password: 'api_token',
+                },
+            });
+        } else {
+            throw new Error('No API Key specified')
+        }
     }
 }

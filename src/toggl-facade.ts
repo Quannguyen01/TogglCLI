@@ -3,9 +3,11 @@ import { IConfigManager } from './interface/IConfigManager';
 
 export class TogglFacade {
     private client: TogglClientApi;
+    private configManager: IConfigManager;
 
     constructor(configManager: IConfigManager) {
         this.client = new TogglClientApi(configManager);
+        this.configManager = configManager;
     }
 
     async start(taskName: string, projectName: string) {
@@ -76,5 +78,9 @@ export class TogglFacade {
                 duration: null,
             };
         }
+    }
+
+    setApiKey(key: string) {
+        this.configManager.setValue('API_KEY', key);
     }
 }

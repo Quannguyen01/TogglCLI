@@ -50,4 +50,11 @@ program
         }
     });
 
+program
+    .command('auth_token <apiKey>')
+    .description('setup authorization key')
+    .action((apiKey) => {
+        toggl.setApiKey(apiKey);
+    });
+
 program.parse(process.argv);

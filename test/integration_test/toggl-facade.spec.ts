@@ -11,7 +11,7 @@ describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
 
     before(function() {
-        config = ConfigManager.initialize('config.yml');
+        config = ConfigManager.initialize('test.yml');
     });
 
     it('should start a toggl entry and return a successful object', async function() {
@@ -32,7 +32,7 @@ describe('Toggl Facade intergration test', function() {
     });
 
     it('should display the name and duration of the task', async function() {
-        this.timeout(3000);
+        this.timeout(4000);
         const toggl = new TogglFacade(config);
 
         await toggl.start('Testing current entry', 'Toggl CLI');
@@ -41,8 +41,22 @@ describe('Toggl Facade intergration test', function() {
         let result = await toggl.current();
 
         expect(result.duration).is.not.null;
-        if (result.duration)
-            expect(Math.trunc(result.duration)).to.equal(2);
+        if (result.duration) {
+            expect(result.duration < 4 && 
+                result.duration >= 2).to.be.true;
+        }
         expect(result.description).to.equal('Testing current entry');
+    });
+
+    it('should alter value of api key in the config', function() {
+        const oldApiKey = config.getValue('API_KEY');
+
+        const toggl = new TogglFacade(config);
+        toggl.setApiKey('testing');
+
+        const key = config.getValue('API_KEY');
+        expect(key).equals('testing');
+
+        toggl.setApiKey(oldApiKey);
     });
 });

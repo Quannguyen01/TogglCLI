@@ -20,6 +20,8 @@ describe('configuration manager', function() {
     });
 
     it('should store the value to the config file', function() {
+        const oldValue = config.getValue('API_KEY');
+
         config.setValue('API_KEY', 'testing');
         let apiKey = config.getValue('API_KEY');
         expect(apiKey).equals('testing');
@@ -27,5 +29,7 @@ describe('configuration manager', function() {
         config = ConfigManager.initialize('test.yml');
         apiKey = config.getValue('API_KEY');
         expect(apiKey).equals('testing');
+
+        config.setValue('API_KEY', oldValue);
     });
 });
