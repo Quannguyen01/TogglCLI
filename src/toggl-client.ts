@@ -91,7 +91,7 @@ export class TogglClientApi implements IClientAPI {
         }
     }
 
-    private createRequest() : AxiosInstance {
+    private createRequest(): AxiosInstance {
         const apiKey = this.configManager.getValue('API_KEY') as string;
 
         if (apiKey) {
@@ -106,7 +106,7 @@ export class TogglClientApi implements IClientAPI {
                 },
             });
         } else {
-            throw new Error('No API Key specified')
+            throw new Error('No API key specified');
         }
     }
 }
