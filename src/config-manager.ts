@@ -1,22 +1,33 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { parseDocument, stringify } from 'yaml';
 import { IConfigManager } from './interface/IConfigManager';
 
 export class ConfigManager implements IConfigManager {
     static initialize(configPath: string = '') {
-        const file = readFileSync(configPath, 'utf8');
-        const doc = parseDocument(file);
+        function getConfigData(configPath: string) {
+            const configValues = new Map<string, any>();
 
-        const configValues = new Map<string, any>();
-        if (doc.contents) {
-            const contentJSON = doc.contents.toJSON();
-            for (const key in contentJSON) {
-                if (contentJSON.hasOwnProperty(key)) {
-                    configValues.set(key, contentJSON[key]);
+            if (existsSync(configPath)) {
+                const file = readFileSync(configPath, 'utf8');
+                const doc = parseDocument(file);
+        
+                if (doc.contents) {
+                    const contentJSON = doc.contents.toJSON();
+                    for (const key in contentJSON) {
+                        if (contentJSON.hasOwnProperty(key)) {
+                            configValues.set(key, contentJSON[key]);
+                        }
+                    }
                 }
+            } else {
+                console.log(`Config file not found, generating new config at ${configPath}`);
+                writeFileSync(configPath, '', 'utf8');
             }
+
+            return configValues;
         }
 
+        const configValues = getConfigData(configPath);
         return new ConfigManager(configValues, configPath);
     }
 

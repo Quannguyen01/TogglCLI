@@ -1,11 +1,18 @@
 import { expect } from 'chai';
 import { ConfigManager } from '../../src/config-manager';
 import { IConfigManager } from '../../src/interface/IConfigManager';
+import { existsSync, unlinkSync } from 'fs';
 
 describe('configuration manager', function() {
     let config: IConfigManager;
     before(function() {
         config = ConfigManager.initialize('test.yml');
+    });
+
+    it('should generate a new file when it cannot find one', function() {
+        ConfigManager.initialize('nonExist.yml');
+        expect(existsSync('nonExist.yml')).to.be.true;
+        unlinkSync('nonExist.yml');
     });
 
     it('should get api key', function() {
