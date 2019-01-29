@@ -83,4 +83,8 @@ export class TogglFacade {
     setApiKey(key: string) {
         this.configManager.setValue('API_KEY', key);
     }
+
+    setWorkspace(workspaceId: number) {
+        this.configManager.setValue('WORKSPACE_ID', workspaceId);
+    }
 }

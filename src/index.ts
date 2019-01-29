@@ -55,4 +55,11 @@ program
         toggl.setApiKey(apiKey);
     });
 
+program
+    .command('workspace <workspace_id>')
+    .description('setup active workspace')
+    .action((workspace_id) => {
+        toggl.setWorkspace(parseInt(workspace_id, 0));
+    });
+
 program.parse(process.argv);
