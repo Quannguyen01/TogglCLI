@@ -11,7 +11,7 @@ program.version('0.0.1');
 
 program
     .command('start <taskName>')
-    .description('start a task')
+    .description('Start a task')
     .option('-p, --project <projectName>', 'project for the task')
     .action(async (taskName, cmd) => {
         if (cmd.project) {
@@ -28,7 +28,7 @@ program
 
 program
     .command('stop')
-    .description('stop current task')
+    .description('Stop current task')
     .action(async () => {
         const result = await toggl.stop();
         if (result) {
@@ -40,7 +40,7 @@ program
 
 program
     .command('current')
-    .description('get current running task')
+    .description('Get current running task')
     .action(async () => {
         const result = await toggl.current();
         if (result.description && result.duration) {
@@ -50,14 +50,14 @@ program
 
 program
     .command('auth_token <apiKey>')
-    .description('setup authorization key')
+    .description('Setup authorization key')
     .action((apiKey) => {
         toggl.setApiKey(apiKey);
     });
 
 program
     .command('workspace [workspace_id]')
-    .description('setup active workspace')
+    .description('Setup active workspace to workspace_id. List available workspaces if no workspace is provided.')
     .action(async (workspace_id) => {
         if (workspace_id) {
             toggl.setWorkspace(parseInt(workspace_id, 0));
