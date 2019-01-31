@@ -84,4 +84,13 @@ describe('Toggl API Testing', function() {
             this.skip();
         }
     });
+
+    it('should display the available work space', async function() {
+        const workspaces = await toggl.getWorkspaces();
+        expect(workspaces).to.not.empty;
+        
+        const currentWorkspace = parseInt(mockConfig.getValue('WORKSPACE_ID'));
+        const workspaceIDs = workspaces.map(w => w.id);
+        expect(workspaceIDs).includes(currentWorkspace);
+    });
 });

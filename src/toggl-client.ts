@@ -3,6 +3,7 @@ import { TimeEntry } from './model/TimeEntry';
 import { Project } from './model/Project';
 import { IClientAPI } from './interface/IClientAPI';
 import { IConfigManager } from './interface/IConfigManager';
+import { Workspace } from './model/Workspace';
 
 export class TogglClientApi implements IClientAPI {
     private configManager: IConfigManager;
@@ -72,6 +73,16 @@ export class TogglClientApi implements IClientAPI {
         } catch (err) {
             this.publishError(err);
             return null;
+        }
+    }
+
+    async getWorkspaces() {
+        try {
+            const response = await this.createRequest().get('/workspaces');
+            return this.extractDataArray<Workspace>(response);
+        } catch (err) {
+            this.publishError(err);
+            return [] as Workspace[];
         }
     }
 

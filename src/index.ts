@@ -56,10 +56,19 @@ program
     });
 
 program
-    .command('workspace <workspace_id>')
+    .command('workspace [workspace_id]')
     .description('setup active workspace')
-    .action((workspace_id) => {
-        toggl.setWorkspace(parseInt(workspace_id, 0));
+    .action(async (workspace_id) => {
+        if (workspace_id) {
+            toggl.setWorkspace(parseInt(workspace_id, 0));
+        } else {
+            let workspaces = await toggl.getWorkspaces();
+            console.log('Available workspaces:');
+            for (let workspace of workspaces) {
+                console.log(`* ${workspace.name} - ${workspace.id}`);
+            }
+            console.log('Type workspace <workspace_id> if you want to swap workspace')
+        }
     });
 
 program.parse(process.argv);

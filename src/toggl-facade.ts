@@ -85,6 +85,27 @@ export class TogglFacade {
     }
 
     setWorkspace(workspaceId: number) {
+        // TODO: stop current task in current workspace before switching??
         this.configManager.setValue('WORKSPACE_ID', workspaceId);
+    }
+
+    async getWorkspaces() {
+        try {
+            let workspaces = await this.client.getWorkspaces();
+
+            if(workspaces && workspaces.length > 0) {
+                return workspaces.map(w => {
+                    return {
+                        id: w.id,
+                        name: w.name
+                    };
+                });
+            } else {
+                throw new Error('No workspace found')
+            }
+        } catch (err) {
+            console.log(err.message);
+            return [];
+        }
     }
 }
