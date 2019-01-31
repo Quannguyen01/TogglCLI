@@ -4,27 +4,27 @@ import { IConfigManager } from './interface/IConfigManager';
 
 export class ConfigManager implements IConfigManager {
     static initialize(configPath: string = '') {
-        function getConfigData(configPath: string) {
-            const configValues = new Map<string, any>();
+        function getConfigData(path: string) {
+            const values = new Map<string, any>();
 
-            if (existsSync(configPath)) {
-                const file = readFileSync(configPath, 'utf8');
+            if (existsSync(path)) {
+                const file = readFileSync(path, 'utf8');
                 const doc = parseDocument(file);
-        
+
                 if (doc.contents) {
                     const contentJSON = doc.contents.toJSON();
                     for (const key in contentJSON) {
                         if (contentJSON.hasOwnProperty(key)) {
-                            configValues.set(key, contentJSON[key]);
+                            values.set(key, contentJSON[key]);
                         }
                     }
                 }
             } else {
-                console.log(`Config file not found, generating new config at ${configPath}`);
-                writeFileSync(configPath, '', 'utf8');
+                console.log(`Config file not found, generating new config at ${path}`);
+                writeFileSync(path, '', 'utf8');
             }
 
-            return configValues;
+            return values;
         }
 
         const configValues = getConfigData(configPath);

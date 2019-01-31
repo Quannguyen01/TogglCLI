@@ -13,7 +13,8 @@
         "no-string-literal": false,
         "ordered-imports": false,
         "only-arrow-functions": false,
-        "no-unused-expression": false
+        "no-unused-expression": false,
+        "radix": false
     },
     "rulesDirectory": []
 }

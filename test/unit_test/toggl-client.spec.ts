@@ -18,7 +18,7 @@ describe('Toggl API Testing', function() {
             tags: ['billed'],
             duration: 1200,
             start: new Date('2013-03-05T07:58:58.000Z'),
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID'), 0),
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
             created_with: mockConfig.getValue('APP_NAME') || '',
         };
 
@@ -38,7 +38,7 @@ describe('Toggl API Testing', function() {
         const entry: TimeEntry = {
             description: 'Testing starting time entry from Toggl client',
             tags: ['dev'],
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID'), 0),
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
             created_with: mockConfig.getValue('APP_NAME') || '',
         };
 
@@ -54,7 +54,7 @@ describe('Toggl API Testing', function() {
     it('should get the current running entry from toggl', async function() {
         await toggl.startEntry({
             description: 'Testing adding new entry to get current',
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID'), 0),
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
             created_with: mockConfig.getValue('APP_NAME') || '',
         });
 
@@ -88,9 +88,9 @@ describe('Toggl API Testing', function() {
     it('should display the available work space', async function() {
         const workspaces = await toggl.getWorkspaces();
         expect(workspaces).to.not.empty;
-        
-        const currentWorkspace = parseInt(mockConfig.getValue('WORKSPACE_ID'));
-        const workspaceIDs = workspaces.map(w => w.id);
+
+        const currentWorkspace = parseInt(mockConfig.getValue('WORKSPACE_ID')) || 0;
+        const workspaceIDs = workspaces.map((w) => w.id);
         expect(workspaceIDs).includes(currentWorkspace);
     });
 });

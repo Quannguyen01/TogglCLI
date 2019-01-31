@@ -75,7 +75,7 @@ describe('Toggl Facade intergration test', function() {
 
     it('should get available workspace name', async function() {
         const workspaceID = parseInt(config.getValue('WORKSPACE_ID'));
-        const workspaces = (await toggl.getWorkspaces()).map(w => w.id);
+        const workspaces = (await toggl.getWorkspaces()).map((w) => w.id);
         expect(workspaces).includes(workspaceID);
     });
 });

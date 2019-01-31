@@ -58,16 +58,16 @@ program
 program
     .command('workspace [workspace_id]')
     .description('Setup active workspace to workspace_id. List available workspaces if no workspace is provided.')
-    .action(async (workspace_id) => {
-        if (workspace_id) {
-            toggl.setWorkspace(parseInt(workspace_id, 0));
+    .action(async (workspaceId) => {
+        if (workspaceId) {
+            toggl.setWorkspace(parseInt(workspaceId) || 0);
         } else {
-            let workspaces = await toggl.getWorkspaces();
+            const workspaces = await toggl.getWorkspaces();
             console.log('Available workspaces:');
-            for (let workspace of workspaces) {
+            for (const workspace of workspaces) {
                 console.log(`* ${workspace.name} - ${workspace.id}`);
             }
-            console.log('Type workspace <workspace_id> if you want to swap workspace')
+            console.log('Type workspace <workspace_id> if you want to swap workspace');
         }
     });
 

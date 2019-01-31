@@ -91,17 +91,17 @@ export class TogglFacade {
 
     async getWorkspaces() {
         try {
-            let workspaces = await this.client.getWorkspaces();
+            const workspaces = await this.client.getWorkspaces();
 
-            if(workspaces && workspaces.length > 0) {
-                return workspaces.map(w => {
+            if (workspaces && workspaces.length > 0) {
+                return workspaces.map((w) => {
                     return {
                         id: w.id,
-                        name: w.name
+                        name: w.name,
                     };
                 });
             } else {
-                throw new Error('No workspace found')
+                throw new Error('No workspace found');
             }
         } catch (err) {
             console.log(err.message);
