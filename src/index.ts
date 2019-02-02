@@ -65,7 +65,9 @@ program
             const workspaces = await toggl.getWorkspaces();
             console.log('Available workspaces:');
             for (const workspace of workspaces) {
-                console.log(`* ${workspace.name} - ${workspace.id}`);
+                let outString = `* ${workspace.name} - ${workspace.id}` +
+                        (workspace.isCurrent ? ' <-- current workspace' : '');
+                console.log(outString);
             }
             console.log('Type workspace <workspace_id> if you want to swap workspace');
         }

@@ -98,6 +98,7 @@ export class TogglFacade {
                     return {
                         id: w.id,
                         name: w.name,
+                        isCurrent: w.id == parseInt(this.configManager.getValue('WORKSPACE_ID')),
                     };
                 });
             } else {
