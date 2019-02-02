@@ -49,7 +49,7 @@ export class TogglFacade {
                     throw new Error('Cannot stop current task');
                 }
             } else {
-                throw new Error('Cannot get current task');
+                throw new Error('No current task is running');
             }
         } catch (err) {
             console.log(err.message);
@@ -84,9 +84,28 @@ export class TogglFacade {
         this.configManager.setValue('API_KEY', key);
     }
 
-    setWorkspace(workspaceId: number) {
-        // TODO: stop current task in current workspace before switching??
-        this.configManager.setValue('WORKSPACE_ID', workspaceId);
+    async setWorkspace(workspaceName: string) {
+        await this.stop();
+
+        const workspaces = await this.getWorkspaces();
+        const workspace = workspaces.find((w) => w.name == workspaceName);
+
+        if (workspace) {
+            this.configManager.setValue('WORKSPACE_ID', workspace.id);
+        } else {
+            console.log(`${workspaceName} not found!`)
+        }
+    }
+
+    async getCurrentWorkspace() {
+        const workspaces = await this.getWorkspaces();
+        const currentWorkspace = workspaces.find((w) => w.isCurrent);
+
+        if (currentWorkspace) {
+            return currentWorkspace;
+        } else {
+            return null;
+        }
     }
 
     async getWorkspaces() {

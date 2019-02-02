@@ -2,6 +2,7 @@ import { TogglFacade } from '../../src/toggl-facade';
 import { expect } from 'chai';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { ConfigManager } from '../../src/config-manager';
+import { exec } from 'child_process';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,7 +40,7 @@ describe('Toggl Facade intergration test', function() {
         this.timeout(4000);
 
         await toggl.start('Testing current entry', 'Toggl CLI');
-        await sleep(2000);
+        await sleep(2500);
 
         const result = await toggl.current();
 
@@ -62,15 +63,19 @@ describe('Toggl Facade intergration test', function() {
         toggl.setApiKey(oldApiKey);
     });
 
-    it('should alter value of workspace id in the config', function() {
-        const oldWorkspaceID = config.getValue('WORKSPACE_ID');
+    it('should alter value of workspace id in the config', async function() {
+        const oldWorkspace = await toggl.getCurrentWorkspace();
 
-        toggl.setWorkspace(1);
-
-        const workspace = config.getValue('WORKSPACE_ID');
-        expect(workspace).equals(1);
-
-        toggl.setWorkspace(oldWorkspaceID);
+        if (oldWorkspace != null) {
+            await toggl.setWorkspace('Toggl CLI Test');
+    
+            const workspace = config.getValue('WORKSPACE_ID');
+            expect(workspace).not.equal(oldWorkspace.id);
+    
+            await toggl.setWorkspace(oldWorkspace.name);
+        } else {
+            this.skip();
+        }
     });
 
     it('should get available workspace name', async function() {
