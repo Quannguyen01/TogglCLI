@@ -2,7 +2,6 @@ import { TogglFacade } from '../../src/toggl-facade';
 import { expect } from 'chai';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { ConfigManager } from '../../src/config-manager';
-import { exec } from 'child_process';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -47,7 +46,7 @@ describe('Toggl Facade intergration test', function() {
         expect(result.duration).is.not.null;
         if (result.duration) {
             expect(result.duration < 4 &&
-                result.duration >= 2).to.be.true;
+                result.duration >= 1.5).to.be.true;
         }
         expect(result.description).to.equal('Testing current entry');
     });
@@ -68,10 +67,10 @@ describe('Toggl Facade intergration test', function() {
 
         if (oldWorkspace != null) {
             await toggl.setWorkspace('Toggl CLI Test');
-    
+
             const workspace = config.getValue('WORKSPACE_ID');
             expect(workspace).not.equal(oldWorkspace.id);
-    
+
             await toggl.setWorkspace(oldWorkspace.name);
         } else {
             this.skip();

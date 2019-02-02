@@ -56,16 +56,16 @@ program
     });
 
 program
-    .command('workspace [workspace]')
+    .command('workspace [workspaceName]')
     .description('Setup active workspace to a specific. List available workspaces if no workspace is provided.')
-    .action(async (workspace) => {
-        if (workspace) {
-            await toggl.setWorkspace(workspace);
+    .action(async (workspaceName) => {
+        if (workspaceName) {
+            await toggl.setWorkspace(workspaceName);
         } else {
             const workspaces = await toggl.getWorkspaces();
             console.log('Available workspaces:');
             for (const workspace of workspaces) {
-                let outString = `* ${workspace.name}` +
+                const outString = `* ${workspace.name}` +
                         (workspace.isCurrent ? ' <-- current workspace' : '');
                 console.log(outString);
             }

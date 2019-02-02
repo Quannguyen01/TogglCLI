@@ -88,12 +88,12 @@ export class TogglFacade {
         await this.stop();
 
         const workspaces = await this.getWorkspaces();
-        const workspace = workspaces.find((w) => w.name == workspaceName);
+        const workspace = workspaces.find((w) => w.name === workspaceName);
 
         if (workspace) {
             this.configManager.setValue('WORKSPACE_ID', workspace.id);
         } else {
-            console.log(`${workspaceName} not found!`)
+            console.log(`${workspaceName} not found!`);
         }
     }
 
@@ -117,7 +117,7 @@ export class TogglFacade {
                     return {
                         id: w.id,
                         name: w.name,
-                        isCurrent: w.id == parseInt(this.configManager.getValue('WORKSPACE_ID')),
+                        isCurrent: w.id === parseInt(this.configManager.getValue('WORKSPACE_ID')),
                     };
                 });
             } else {
