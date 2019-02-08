@@ -45,6 +45,8 @@ program
         const result = await toggl.current();
         if (result.description && result.duration) {
             console.log(`Current task: ${result.description}\nDuration: ${makePrettyTimeDuration(result.duration)}`);
+        } else {
+            console.log('No current task is found!');
         }
     });
 
@@ -60,7 +62,11 @@ program
     .description('Setup active workspace to a specific. List available workspaces if no workspace is provided.')
     .action(async (workspaceName) => {
         if (workspaceName) {
-            await toggl.setWorkspace(workspaceName);
+            if (!await toggl.setWorkspace(workspaceName)) {
+                console.log(`Workspace ${workspaceName} not found`);
+            } else {
+                console.log(`Switched to ${workspaceName}.`)
+            }
         } else {
             const workspaces = await toggl.getWorkspaces();
             console.log('Available workspaces:');

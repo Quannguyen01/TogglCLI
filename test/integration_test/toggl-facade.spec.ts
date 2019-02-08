@@ -66,10 +66,11 @@ describe('Toggl Facade intergration test', function() {
         const oldWorkspace = await toggl.getCurrentWorkspace();
 
         if (oldWorkspace != null) {
-            await toggl.setWorkspace('Toggl CLI Test');
-
+            const result = await toggl.setWorkspace('Toggl CLI Test');
             const workspace = config.getValue('WORKSPACE_ID');
+
             expect(workspace).not.equal(oldWorkspace.id);
+            expect(result).to.be.true;
 
             await toggl.setWorkspace(oldWorkspace.name);
         } else {
