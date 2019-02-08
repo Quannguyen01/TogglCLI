@@ -27,8 +27,8 @@ export class TogglFacade {
 
         return {
             pid: null,
-            description: null
-        }
+            description: null,
+        };
     }
 
     async stop() {

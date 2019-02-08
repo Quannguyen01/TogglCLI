@@ -65,7 +65,7 @@ program
             if (!await toggl.setWorkspace(workspaceName)) {
                 console.log(`Workspace ${workspaceName} not found`);
             } else {
-                console.log(`Switched to ${workspaceName}.`)
+                console.log(`Switched to ${workspaceName}.`);
             }
         } else {
             const workspaces = await toggl.getWorkspaces();
