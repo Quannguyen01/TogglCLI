@@ -51,15 +51,15 @@ describe('Toggl Facade intergration test', function() {
         expect(result.description).to.equal('Testing current entry');
     });
 
-    it('should alter value of api key in the config', function() {
+    it('should alter value of api key in the config', async function() {
         const oldApiKey = config.getValue('API_KEY');
 
-        toggl.setApiKey('testing');
+        await toggl.setApiKey('testing');
 
         const key = config.getValue('API_KEY');
         expect(key).equals('testing');
 
-        toggl.setApiKey(oldApiKey);
+        await toggl.setApiKey(oldApiKey);
     });
 
     it('should alter value of workspace id in the config', async function() {

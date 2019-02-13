@@ -9,7 +9,9 @@ describe('Toggl API Testing', function() {
     let mockConfig: IConfigManager;
     before(function() {
         mockConfig = new MockConfig();
-        toggl = new TogglClientApi(mockConfig);
+        const apiKey = mockConfig.getValue('API_KEY');
+        const workspaceID = mockConfig.getValue('WORKSPACE_ID');
+        toggl = new TogglClientApi(apiKey, workspaceID);
     });
 
     it('should create a time entry using toggl client api', async function() {

@@ -2,14 +2,15 @@ import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { TimeEntry } from './model/TimeEntry';
 import { Project } from './model/Project';
 import { IClientAPI } from './interface/IClientAPI';
-import { IConfigManager } from './interface/IConfigManager';
 import { Workspace } from './model/Workspace';
 
 export class TogglClientApi implements IClientAPI {
-    private configManager: IConfigManager;
+    private apiKey: string;
+    private workspaceID: number;
 
-    constructor(configManager: IConfigManager) {
-        this.configManager = configManager;
+    constructor(apiKey: string, workspaceID: number = 0) {
+        this.apiKey = apiKey;
+        this.workspaceID = workspaceID;
     }
 
     async createEntry(entry: TimeEntry) {
@@ -38,8 +39,7 @@ export class TogglClientApi implements IClientAPI {
 
     async findProjectId(projectName: string) {
         try {
-            const workspaceId = this.configManager.getValue('WORKSPACE_ID');
-            const response = await this.createRequest().get(`/workspaces/${workspaceId}/projects`);
+            const response = await this.createRequest().get(`/workspaces/${this.workspaceID}/projects`);
             const projects = this.extractDataArray<Project>(response);
             if (projects) {
                 const proj = projects.find((p) => p.name === projectName) as Project;
@@ -103,7 +103,7 @@ export class TogglClientApi implements IClientAPI {
     }
 
     private createRequest(): AxiosInstance {
-        const apiKey = this.configManager.getValue('API_KEY') as string;
+        const apiKey = this.apiKey;
 
         if (apiKey) {
             return Axios.create({

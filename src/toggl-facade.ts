@@ -6,8 +6,10 @@ export class TogglFacade {
     private configManager: IConfigManager;
 
     constructor(configManager: IConfigManager) {
-        this.client = new TogglClientApi(configManager);
         this.configManager = configManager;
+        const apiKey = configManager.getValue('API_KEY');
+        const workspaceID = configManager.getValue('WORKSPACE_ID');
+        this.client = new TogglClientApi(apiKey, workspaceID);
     }
 
     async start(taskName: string, projectName: string) {
@@ -62,18 +64,18 @@ export class TogglFacade {
         }
     }
 
-    setApiKey(key: string) {
+    async setApiKey(key: string) {
         this.configManager.setValue('API_KEY', key);
+        await this.restartClient(key, this.configManager.getValue('WORKSPACE_ID'));
     }
 
     async setWorkspace(workspaceName: string) {
-        await this.stop();
-
         const workspaces = await this.getWorkspaces();
         const workspace = workspaces.find((w) => w.name === workspaceName);
 
         if (workspace) {
             this.configManager.setValue('WORKSPACE_ID', workspace.id);
+            await this.restartClient(this.configManager.getValue('API_KEY'), workspace.id);
             return true;
         }
 
@@ -105,5 +107,10 @@ export class TogglFacade {
         } else {
             return [];
         }
+    }
+
+    private async restartClient(apiKey = '', workspaceID = 0) {
+        await this.stop();
+        this.client = new TogglClientApi(apiKey, workspaceID);
     }
 }
