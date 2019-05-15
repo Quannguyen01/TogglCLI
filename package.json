@@ -1,12 +1,14 @@
 {
   "name": "togglcli",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test-all": "npm run test test/**/*.spec.ts",
     "test": "mocha -r ts-node/register",
-    "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'"
+    "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'",
+    "build": "tsc -p tsconfig.json",
+    "package": "pkg ./build/index.js --out-path ./release"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +26,7 @@
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
     "dotenv": "^6.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "pkg": "^4.3.8"
   }
 }
