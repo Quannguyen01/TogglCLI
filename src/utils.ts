@@ -45,7 +45,7 @@ export function printEntry(entry: ReportTimeEntry) {
         entry.project || '',
         entry.start ? getTimePortion(new Date(entry.start)) : '',
         entry.end ? getTimePortion(new Date(entry.end)) : '',
-        makePrettyTimeDuration(entry.dur || 0),
+        entry.dur ? makePrettyTimeDuration(entry.dur / 1000) : '00:00:00',
     ];
 
     const output = arrayZipWith(padEndSpace, entryOutput, [40, 20, 12, 12, 12]).join(' | ');
