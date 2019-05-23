@@ -15,4 +15,5 @@ To use:
 * View current task `current`
 * Swap workspace `workspace <workspace_name>`
 * List available workspaces `workspace`
+* List today's entries `entries`
 * For more info `--help`

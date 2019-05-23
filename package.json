@@ -2,13 +2,13 @@
   "name": "togglcli",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "toggl-cli.js",
   "scripts": {
     "test-all": "npm run test test/**/*.spec.ts",
     "test": "mocha -r ts-node/register",
     "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'",
     "build": "tsc -p tsconfig.json",
-    "package": "pkg ./build/index.js --out-path ./release"
+    "package": "pkg ./build/toggl-cli.js --out-path ./release"
   },
   "author": "",
   "license": "ISC",
