@@ -1,8 +1,10 @@
 import { TogglClientApi } from './toggl-client';
 import { IConfigManager } from './interface/IConfigManager';
+import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
+import { IClientAPI } from './interface/IClientAPI';
 
 export class TogglFacade {
-    private client: TogglClientApi;
+    private client: IClientAPI;
     private configManager: IConfigManager;
 
     constructor(configManager: IConfigManager) {
@@ -107,6 +109,21 @@ export class TogglFacade {
         } else {
             return [];
         }
+    }
+
+    async getEntriesForDay(date: Date) {
+        const workspaceId = parseInt(this.configManager.getValue('WORKSPACE_ID'));
+        let entries: ReportTimeEntry[] = [];
+        let page = 1;
+        let reportDetails = await this.client.getDetailReport(workspaceId, date, date, page);
+
+        while (reportDetails && reportDetails.data.length > 0) {
+            entries = entries.concat(reportDetails.data);
+            page++;
+            reportDetails = await this.client.getDetailReport(workspaceId, date, date, page);
+        }
+
+        return entries;
     }
 
     private async restartClient(apiKey = '', workspaceID = 0) {

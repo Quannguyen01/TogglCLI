@@ -1,5 +1,5 @@
 import { TogglClientApi } from '../../src/toggl-client';
-import { TimeEntry } from '../../src/model/TimeEntry';
+import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
 import { expect } from 'chai';
 import { MockConfig } from '../mock_objects/mock-config';
 import { IConfigManager } from '../../src/interface/IConfigManager';
@@ -7,10 +7,11 @@ import { IConfigManager } from '../../src/interface/IConfigManager';
 describe('Toggl API Testing', function() {
     let toggl: TogglClientApi;
     let mockConfig: IConfigManager;
+    let workspaceID: number;
     before(function() {
         mockConfig = new MockConfig();
         const apiKey = mockConfig.getValue('API_KEY');
-        const workspaceID = mockConfig.getValue('WORKSPACE_ID');
+        workspaceID = mockConfig.getValue('WORKSPACE_ID');
         toggl = new TogglClientApi(apiKey, workspaceID);
     });
 
@@ -87,12 +88,21 @@ describe('Toggl API Testing', function() {
         }
     });
 
-    it('should display the available work space', async function() {
+    it('should display the available workspace', async function() {
         const workspaces = await toggl.getWorkspaces();
         expect(workspaces).to.not.empty;
 
         const currentWorkspace = parseInt(mockConfig.getValue('WORKSPACE_ID')) || 0;
         const workspaceIDs = workspaces.map((w) => w.id);
         expect(workspaceIDs).includes(currentWorkspace);
+    });
+
+    it('should get report detail for May 10 2019 for standard workspace', async function() {
+        const fromDate = new Date('2019-05-10');
+        const toDate = new Date('2019-05-10');
+        const page = 1;
+        const details = await toggl.getDetailReport(workspaceID, fromDate, toDate, page);
+
+        expect(details).to.not.be.null;
     });
 });

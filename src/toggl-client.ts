@@ -1,8 +1,9 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { TimeEntry } from './model/TimeEntry';
-import { Project } from './model/Project';
+import { TimeEntry } from './model/TogglAPI/TimeEntry';
+import { Project } from './model/TogglAPI/Project';
 import { IClientAPI } from './interface/IClientAPI';
-import { Workspace } from './model/Workspace';
+import { Workspace } from './model/TogglAPI/Workspace';
+import { ReportDetail } from './model/ReportAPI/ReportDetail';
 
 export class TogglClientApi implements IClientAPI {
     private apiKey: string;
@@ -86,6 +87,29 @@ export class TogglClientApi implements IClientAPI {
         }
     }
 
+    async getDetailReport(workspaceId: number, since: Date, until: Date, page = 1) {
+        try {
+            const request = this.createRequest(
+                {
+                    workspace_id: workspaceId,
+                    since,
+                    until,
+                    page,
+                    user_agent: 'my-toggl-client',
+                }, true);
+
+            const response = await request.get('/details');
+            return this.extractReportData<ReportDetail>(response);
+        } catch (err) {
+            this.publishError(err);
+            return null;
+        }
+    }
+
+    private extractReportData<T>(result: AxiosResponse) {
+        return result.data as T;
+    }
+
     private extractDataArray<T>(result: AxiosResponse) {
         return result.data as T[];
     }
@@ -102,12 +126,12 @@ export class TogglClientApi implements IClientAPI {
         }
     }
 
-    private createRequest(): AxiosInstance {
+    private createRequest(params?: object, reportAPI = false): AxiosInstance {
         const apiKey = this.apiKey;
 
         if (apiKey) {
             return Axios.create({
-                baseURL: 'https://www.toggl.com/api/v8',
+                baseURL: reportAPI ? 'https://www.toggl.com/reports/api/v2' : 'https://www.toggl.com/api/v8',
                 headers: {
                     'Content-Type': 'application-json',
                 },
@@ -115,6 +139,7 @@ export class TogglClientApi implements IClientAPI {
                     username: apiKey,
                     password: 'api_token',
                 },
+                params,
             });
         } else {
             throw new Error('No API key specified');

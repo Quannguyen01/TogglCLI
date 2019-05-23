@@ -1,5 +1,14 @@
+import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
+import { arrayZipWith } from './listFunctional';
+
 function padZeroes(num: any, numZero: number) {
     return num.toString().padStart(numZero, '0');
+}
+
+export function padEndSpace(str: string, numSpace: number) {
+    return (str.length > numSpace) ?
+        str.substr(0, numSpace) :
+        str.padEnd(numSpace, ' ');
 }
 
 export function makePrettyTimeDuration(durationInSec: number) {
@@ -17,4 +26,29 @@ export function makePrettyTimeDuration(durationInSec: number) {
 
     return (dayDisplay > 0 ? `${dayDisplay} days - ` : '') +
         `${hourDisplay}:${minDisplay}:${secDisplay}`;
+}
+
+export function getDatePortion(date: Date) {
+    return `${date.getFullYear()}-${padZeroes(date.getMonth() + 1, 2)}-${padZeroes(date.getDate(), 2)}`;
+}
+
+export function getTimePortion(date: Date) {
+    const [hour, minute, second] =
+        [date.getHours(), date.getMinutes(), date.getSeconds()].map((a) => padZeroes(a, 2));
+
+    return `${hour}:${minute}:${second}`;
+}
+
+export function printEntry(entry: ReportTimeEntry) {
+    const entryOutput = [
+        entry.description,
+        entry.project || '',
+        entry.start ? getTimePortion(new Date(entry.start)) : '',
+        entry.end ? getTimePortion(new Date(entry.end)) : '',
+        makePrettyTimeDuration(entry.dur || 0),
+    ];
+
+    const output = arrayZipWith(padEndSpace, entryOutput, [40, 20, 12, 12, 12]).join(' | ');
+
+    console.log(output);
 }

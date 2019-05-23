@@ -1,5 +1,6 @@
-import { TimeEntry } from '../model/TimeEntry';
-import { Workspace } from '../model/Workspace';
+import { TimeEntry } from '../model/TogglAPI/TimeEntry';
+import { Workspace } from '../model/TogglAPI/Workspace';
+import { ReportDetail } from '../model/ReportAPI/ReportDetail';
 
 export interface IClientAPI {
     createEntry(entry: TimeEntry): Promise<any>;
@@ -8,4 +9,5 @@ export interface IClientAPI {
     getCurrent(): Promise<TimeEntry | null>;
     stopEntry(timeEntryId: number): Promise<TimeEntry | null>;
     getWorkspaces(): Promise<Workspace[]>;
+    getDetailReport(workspaceId: number, since: Date, until: Date, page: number): Promise<ReportDetail | null>;
 }

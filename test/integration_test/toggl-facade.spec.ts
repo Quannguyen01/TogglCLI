@@ -83,4 +83,10 @@ describe('Toggl Facade intergration test', function() {
         const workspaces = (await toggl.getWorkspaces()).map((w) => w.id);
         expect(workspaces).includes(workspaceID);
     });
+
+    it('should get all the time entries for May 10 2019, expect 18 of them', async function() {
+        const day = new Date('2019-05-10');
+        const tasks = (await toggl.getEntriesForDay(day));
+        expect(tasks.length).to.equal(18);
+    });
 });

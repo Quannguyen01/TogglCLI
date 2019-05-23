@@ -1,13 +1,13 @@
 import { Command } from 'commander';
 import { TogglFacade } from './toggl-facade';
-import { makePrettyTimeDuration } from './utils';
+import { makePrettyTimeDuration, getDatePortion, printEntry, padEndSpace } from './utils';
 import { ConfigManager } from './config-manager';
 
 const program = new Command();
 const configManager = ConfigManager.initialize('config.yml');
 const toggl = new TogglFacade(configManager);
 
-program.version('0.0.1');
+program.version('0.1.0');
 
 program
     .command('start <taskName>')
@@ -77,6 +77,18 @@ program
             }
             console.log('Type workspace <workspace_id> if you want to swap workspace');
         }
+    });
+
+program
+    .command('entries')
+    .description('List time entries entered today')
+    .action(async () => {
+        const date = getDatePortion(new Date());
+        const entries = await toggl.getEntriesForDay(new Date(date));
+        const header = `${padEndSpace('Entry', 40)} | ${padEndSpace('Project', 20)} | ` +
+                        `${padEndSpace('Start', 12)} | ${padEndSpace('End', 12)} | ${padEndSpace('Duration', 12)}`;
+        console.log(header);
+        entries.forEach(printEntry);
     });
 
 program.parse(process.argv);
