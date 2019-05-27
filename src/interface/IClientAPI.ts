@@ -10,4 +10,5 @@ export interface IClientAPI {
     stopEntry(timeEntryId: number): Promise<TimeEntry | null>;
     getWorkspaces(): Promise<Workspace[]>;
     getDetailReport(workspaceId: number, since: Date, until: Date, page: number): Promise<ReportDetail | null>;
+    deleteEntry(entryID: number): Promise<any>;
 }

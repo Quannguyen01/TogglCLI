@@ -41,6 +41,7 @@ export function getTimePortion(date: Date) {
 
 export function printEntry(entry: ReportTimeEntry) {
     const entryOutput = [
+        entry.id ? entry.id.toString() : '',
         entry.description,
         entry.project || '',
         entry.start ? getTimePortion(new Date(entry.start)) : '',
@@ -48,7 +49,7 @@ export function printEntry(entry: ReportTimeEntry) {
         entry.dur ? makePrettyTimeDuration(entry.dur / 1000) : '00:00:00',
     ];
 
-    const output = arrayZipWith(padEndSpace, entryOutput, [40, 20, 12, 12, 12]).join(' | ');
+    const output = arrayZipWith(padEndSpace, entryOutput, [12, 40, 20, 12, 12, 12]).join(' | ');
 
     console.log(output);
 }

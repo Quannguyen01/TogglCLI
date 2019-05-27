@@ -30,6 +30,7 @@ export class TogglFacade {
         }
 
         return {
+            id: null,
             pid: null,
             description: null,
         };
@@ -124,6 +125,11 @@ export class TogglFacade {
         }
 
         return entries;
+    }
+
+    async deleteEntry(timeEntryId: number) {
+        const result = await this.client.deleteEntry(timeEntryId);
+        return result.status == 200;
     }
 
     private async restartClient(apiKey = '', workspaceID = 0) {

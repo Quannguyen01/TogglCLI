@@ -6,7 +6,7 @@ import { existsSync, unlinkSync } from 'fs';
 describe('configuration manager', function() {
     let config: IConfigManager;
     before(function() {
-        config = ConfigManager.initialize('test.yml');
+        config = ConfigManager.initialize('./test/test.yml');
     });
 
     it('should generate a new file when it cannot find one', function() {
@@ -33,7 +33,6 @@ describe('configuration manager', function() {
         let apiKey = config.getValue('API_KEY');
         expect(apiKey).equals('testing');
 
-        config = ConfigManager.initialize('test.yml');
         apiKey = config.getValue('API_KEY');
         expect(apiKey).equals('testing');
 

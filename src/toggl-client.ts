@@ -21,6 +21,7 @@ export class TogglClientApi implements IClientAPI {
         } catch (err) {
             this.publishError(err);
             return {
+                id: null,
                 pid: null,
                 description: null,
             };
@@ -103,6 +104,15 @@ export class TogglClientApi implements IClientAPI {
         } catch (err) {
             this.publishError(err);
             return null;
+        }
+    }
+
+    async deleteEntry(timeEntryId: number) {
+        try {
+            return await this.createRequest().delete(`/time_entries/${timeEntryId}`);
+        } catch (err) {
+            this.publishError(err);
+            return err.response;
         }
     }
 

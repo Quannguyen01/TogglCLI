@@ -91,4 +91,18 @@ describe('Toggl Facade intergration test', function() {
         expect(tasks.find((entry) => entry.description == 'Test adding new facade entry'))
             .to.not.be.undefined;
     });
+
+    it('should create a task and delete it immediately', async function() {
+        const entry = await toggl.start('Test deleting facade entry', 'Toggl CLI');
+
+        if (entry != null) {
+            const entryId = entry.id || 0;
+            await toggl.stop();
+    
+            const result = await toggl.deleteEntry(entryId);
+            expect(result).to.be.true;
+        } else {
+            expect.fail('Entry should not be null!');
+        }
+    });
 });

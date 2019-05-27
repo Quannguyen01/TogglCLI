@@ -3,9 +3,10 @@ import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
 import { expect } from 'chai';
 import { MockConfig } from '../mock_objects/mock-config';
 import { IConfigManager } from '../../src/interface/IConfigManager';
+import { IClientAPI } from '../../src/interface/IClientAPI';
 
 describe('Toggl API Testing', function() {
-    let toggl: TogglClientApi;
+    let toggl: IClientAPI;
     let mockConfig: IConfigManager;
     let workspaceID: number;
     before(function() {
@@ -50,7 +51,7 @@ describe('Toggl API Testing', function() {
         if (result) {
             expect(result.description).to.equal(entry.description);
         } else {
-            this.skip();
+            expect.fail('Failed to start time entry');
         }
     });
 
@@ -110,5 +111,25 @@ describe('Toggl API Testing', function() {
         } else {
             expect.fail("details should not be null");
         }
+    });
+
+    it('should create an entry and delete it immediately', async function() {
+        const entry: TimeEntry = {
+            description: 'Testing delete',
+            tags: ['dev'],
+            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
+            created_with: mockConfig.getValue('APP_NAME') || '',
+        };
+
+        const createdResult = await toggl.startEntry(entry);
+
+        if (createdResult) {
+            const entryID = createdResult.id || 0;
+            expect(entryID).not.equals(0);
+
+            const result = await toggl.deleteEntry(entryID);
+            expect(result.status).equals(200);
+        }
+
     });
 });
