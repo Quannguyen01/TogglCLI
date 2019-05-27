@@ -10,6 +10,7 @@ function sleep(ms: number) {
 describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
+    let entriesToDelete: number[] = [];
 
     before(function() {
         config = ConfigManager.initialize('./test/test.yml');
@@ -22,23 +23,31 @@ describe('Toggl Facade intergration test', function() {
     it('should start a toggl entry and return a successful object', async function() {
         const result = await toggl.start('Test adding new facade entry', 'Toggl CLI');
         expect(result.description).to.equal('Test adding new facade entry');
+
+        if (result && result.id) {
+            entriesToDelete.push(result.id);
+        }
     });
 
     it('should stop a toggl entry that is currently running', async function() {
         this.timeout(4000);
 
-        await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
+        const entry = await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
 
         await sleep(2000);
 
         const result = await toggl.stop();
         expect(result).to.greaterThan(0);
+
+        if (entry && entry.id) {
+            entriesToDelete.push(entry.id);
+        }
     });
 
     it('should display the name and duration of the task', async function() {
         this.timeout(4000);
 
-        await toggl.start('Testing current entry', 'Toggl CLI');
+        const entry = await toggl.start('Testing current entry', 'Toggl CLI');
         await sleep(2500);
 
         const result = await toggl.current();
@@ -49,6 +58,10 @@ describe('Toggl Facade intergration test', function() {
                 result.duration >= 1.5).to.be.true;
         }
         expect(result.description).to.equal('Testing current entry');
+
+        if (entry && entry.id) {
+            entriesToDelete.push(entry.id);
+        }
     });
 
     it('should alter value of api key in the config', async function() {
@@ -104,5 +117,9 @@ describe('Toggl Facade intergration test', function() {
         } else {
             expect.fail('Entry should not be null!');
         }
+    });
+
+    after(async function() {
+        entriesToDelete.forEach(async (entry) => await toggl.deleteEntry(entry));
     });
 });

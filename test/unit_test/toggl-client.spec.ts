@@ -9,6 +9,8 @@ describe('Toggl API Testing', function() {
     let toggl: IClientAPI;
     let mockConfig: IConfigManager;
     let workspaceID: number;
+    let entriesToDelete: number[] = [];
+
     before(function() {
         mockConfig = new MockConfig();
         const apiKey = mockConfig.getValue('API_KEY');
@@ -30,6 +32,10 @@ describe('Toggl API Testing', function() {
         expect(result.pid).to.not.be.null;
         expect(result).to.be.not.undefined;
         expect(result.description).to.equal(entry.description);
+
+        if (result && result.id) {
+            entriesToDelete.push(result.id);
+        }
     });
 
     it('should find a toggl project with specified project name', async function() {
@@ -52,6 +58,10 @@ describe('Toggl API Testing', function() {
             expect(result.description).to.equal(entry.description);
         } else {
             expect.fail('Failed to start time entry');
+        }
+
+        if (result && result.id) {
+            entriesToDelete.push(result.id);
         }
     });
 
@@ -131,5 +141,11 @@ describe('Toggl API Testing', function() {
             expect(result.status).equals(200);
         }
 
+    });
+
+    after(async function() {
+        entriesToDelete.forEach(async (entry) => {
+            await toggl.deleteEntry(entry);
+        });
     });
 });
