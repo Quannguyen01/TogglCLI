@@ -10,7 +10,7 @@ function sleep(ms: number) {
 describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
-    let entriesToDelete: number[] = [];
+    const entriesToDelete: number[] = [];
 
     before(function() {
         config = ConfigManager.initialize('./test/test.yml');
@@ -101,7 +101,7 @@ describe('Toggl Facade intergration test', function() {
         const day = new Date('2019-05-10');
         const tasks = await toggl.getEntriesForDay(day);
 
-        expect(tasks.find((entry) => entry.description == 'Test adding new facade entry'))
+        expect(tasks.find((entry) => entry.description === 'Test adding new facade entry'))
             .to.not.be.undefined;
     });
 
@@ -111,7 +111,7 @@ describe('Toggl Facade intergration test', function() {
         if (entry != null) {
             const entryId = entry.id || 0;
             await toggl.stop();
-    
+
             const result = await toggl.deleteEntry(entryId);
             expect(result).to.be.true;
         } else {

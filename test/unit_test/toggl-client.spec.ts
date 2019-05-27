@@ -9,7 +9,7 @@ describe('Toggl API Testing', function() {
     let toggl: IClientAPI;
     let mockConfig: IConfigManager;
     let workspaceID: number;
-    let entriesToDelete: number[] = [];
+    const entriesToDelete: number[] = [];
 
     before(function() {
         mockConfig = new MockConfig();
@@ -116,10 +116,10 @@ describe('Toggl API Testing', function() {
 
         if (details != null) {
             const entries = details.data;
-            expect(entries.find((entry) => entry.description == 'Testing adding new entry to get current'))
+            expect(entries.find((entry) => entry.description === 'Testing adding new entry to get current'))
                 .to.not.be.undefined;
         } else {
-            expect.fail("details should not be null");
+            expect.fail('details should not be null');
         }
     });
 

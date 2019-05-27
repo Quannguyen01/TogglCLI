@@ -85,8 +85,9 @@ program
     .action(async () => {
         const date = getDatePortion(new Date());
         const entries = await toggl.getEntriesForDay(new Date(date));
-        const header = `${padEndSpace('Entry ID', 12)} | ${padEndSpace('Entry', 40)} | ${padEndSpace('Project', 20)} | ` +
-                        `${padEndSpace('Start', 12)} | ${padEndSpace('End', 12)} | ${padEndSpace('Duration', 12)}`;
+        const header = `${padEndSpace('Entry ID', 12)} | ${padEndSpace('Entry', 40)} ` +
+                        `| ${padEndSpace('Project', 20)} | ${padEndSpace('Start', 12)} | ${padEndSpace('End', 12)} ` +
+                        `| ${padEndSpace('Duration', 12)}`;
         console.log(header);
         entries.forEach(printEntry);
     });
