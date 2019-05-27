@@ -10,10 +10,11 @@ Setup the environemnt:
 
 To use:
 
-* Start a task/time-entry `start -p <project> <task>`
-* Stop current task `stop`
-* View current task `current`
-* Swap workspace `workspace <workspace_name>`
-* List available workspaces `workspace`
-* List today's entries `entries`
+* Start a task/time-entry: `start -p <project> <task>`
+* Stop current task: `stop`
+* View current task: `current`
+* Swap workspace: `workspace <workspace_name>`
+* List available workspaces: `workspace`
+* List today's entries: `entries`
+* Delete an entry: `delete <timeEntryId>`
 * For more info `--help`
