@@ -12,7 +12,7 @@ describe('Toggl Facade intergration test', function() {
     let toggl: TogglFacade;
 
     before(function() {
-        config = ConfigManager.initialize('test.yml');
+        config = ConfigManager.initialize('./test/test.yml');
     });
 
     beforeEach(function() {
@@ -84,9 +84,11 @@ describe('Toggl Facade intergration test', function() {
         expect(workspaces).includes(workspaceID);
     });
 
-    it('should get all the time entries for May 10 2019, expect 18 of them', async function() {
+    it('should get all the time entries for today', async function() {
         const day = new Date('2019-05-10');
-        const tasks = (await toggl.getEntriesForDay(day));
-        expect(tasks.length).to.equal(18);
+        const tasks = await toggl.getEntriesForDay(day);
+
+        expect(tasks.find((entry) => entry.description == 'Test adding new facade entry'))
+            .to.not.be.undefined;
     });
 });

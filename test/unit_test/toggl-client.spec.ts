@@ -97,12 +97,18 @@ describe('Toggl API Testing', function() {
         expect(workspaceIDs).includes(currentWorkspace);
     });
 
-    it('should get report detail for May 10 2019 for standard workspace', async function() {
-        const fromDate = new Date('2019-05-10');
-        const toDate = new Date('2019-05-10');
+    it('should get report detail for today for standard workspace', async function() {
+        const fromDate = new Date();
+        const toDate = new Date();
         const page = 1;
         const details = await toggl.getDetailReport(workspaceID, fromDate, toDate, page);
 
-        expect(details).to.not.be.null;
+        if (details != null) {
+            const entries = details.data;
+            expect(entries.find((entry) => entry.description == 'Testing adding new entry to get current'))
+                .to.not.be.undefined;
+        } else {
+            expect.fail("details should not be null");
+        }
     });
 });
