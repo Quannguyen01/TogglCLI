@@ -7,11 +7,9 @@ import { ReportDetail } from './model/ReportAPI/ReportDetail';
 
 export class TogglClientApi implements IClientAPI {
     private apiKey: string;
-    private workspaceID: number;
 
-    constructor(apiKey: string, workspaceID: number = 0) {
+    constructor(apiKey: string) {
         this.apiKey = apiKey;
-        this.workspaceID = workspaceID;
     }
 
     async createEntry(entry: TimeEntry) {
@@ -39,19 +37,10 @@ export class TogglClientApi implements IClientAPI {
         }
     }
 
-    async findProjectId(projectName: string) {
+    async getWorkspaceProjects(workspaceId: number) {
         try {
-            const response = await this.createRequest().get(`/workspaces/${this.workspaceID}/projects`);
-            const projects = this.extractDataArray<Project>(response);
-            if (projects) {
-                const proj = projects.find((p) => p.name === projectName) as Project;
-                if (proj) {
-                    return proj.id;
-                } else {
-                    throw new Error('Project not found!');
-                }
-            }
-            throw new Error('Namespace not found');
+            const response = await this.createRequest().get(`/workspaces/${workspaceId}/projects`);
+            return this.extractDataArray<Project>(response);
         } catch (err) {
             this.publishError(err);
             return null;

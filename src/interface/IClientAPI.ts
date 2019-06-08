@@ -1,11 +1,12 @@
 import { TimeEntry } from '../model/TogglAPI/TimeEntry';
 import { Workspace } from '../model/TogglAPI/Workspace';
 import { ReportDetail } from '../model/ReportAPI/ReportDetail';
+import { Project } from '../model/TogglAPI/Project';
 
 export interface IClientAPI {
     createEntry(entry: TimeEntry): Promise<any>;
     startEntry(entry: TimeEntry): Promise<TimeEntry | null>;
-    findProjectId(projectName: string): Promise<number | null | undefined>;
+    getWorkspaceProjects(workspaceId: number): Promise<Project[] | null>;
     getCurrent(): Promise<TimeEntry | null>;
     stopEntry(timeEntryId: number): Promise<TimeEntry | null>;
     getWorkspaces(): Promise<Workspace[]>;

@@ -1,5 +1,6 @@
 import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
 import { arrayZipWith } from './listFunctional';
+import { Project } from './model/TogglAPI/Project';
 
 function padZeroes(num: any, numZero: number) {
     return num.toString().padStart(numZero, '0');
@@ -50,6 +51,17 @@ export function printEntry(entry: ReportTimeEntry) {
     ];
 
     const output = arrayZipWith(padEndSpace, entryOutput, [12, 40, 20, 12, 12, 12]).join(' | ');
+
+    console.log(output);
+}
+
+export function printProject(project: Project) {
+    const projectOutput = [
+        project.name,
+        project.active ? 'active' : 'inactive',
+    ];
+
+    const output = arrayZipWith(padEndSpace, projectOutput, [30, 10]).join(' | ');
 
     console.log(output);
 }

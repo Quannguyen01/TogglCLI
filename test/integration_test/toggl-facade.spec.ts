@@ -119,6 +119,17 @@ describe('Toggl Facade intergration test', function() {
         }
     });
 
+    it('should find a toggl project with specified project name', async function() {
+        const result = await toggl.findProjectId('Toggl CLI');
+        expect(result).to.not.be.null;
+        expect(result).to.be.not.undefined;
+    });
+
+    it('should list all the projects available in the current workspace', async function() {
+        const result = await toggl.getProjects();
+        expect(result.length).not.equal(0);
+    });
+
     after(async function() {
         entriesToDelete.forEach(async (entry) => await toggl.deleteEntry(entry));
     });

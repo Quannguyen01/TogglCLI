@@ -4,6 +4,7 @@
   "description": "",
   "main": "toggl-cli.js",
   "scripts": {
+    "start": "ts-node src/toggl-cli.ts",
     "test-all": "npm run test test/**/*.spec.ts",
     "test": "mocha -r ts-node/register",
     "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'",

@@ -1,13 +1,13 @@
 import { Command } from 'commander';
 import { TogglFacade } from './toggl-facade';
-import { makePrettyTimeDuration, getDatePortion, printEntry, padEndSpace } from './utils';
+import { makePrettyTimeDuration, getDatePortion, printEntry, padEndSpace, printProject } from './utils';
 import { ConfigManager } from './config-manager';
 
 const program = new Command();
 const configManager = ConfigManager.initialize('config.yml');
 const toggl = new TogglFacade(configManager);
 
-program.version('0.1.0');
+program.version('0.2.0');
 
 program
     .command('start <taskName>')
@@ -101,6 +101,14 @@ program
         } else {
             console.log('Errors while deleting the entry.');
         }
+    });
+
+program
+    .command('projects')
+    .description('List all projects in available workspace')
+    .action(async () => {
+        const projects = await toggl.getProjects();
+        projects.forEach(printProject);
     });
 
 program.parse(process.argv);

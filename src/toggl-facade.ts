@@ -2,6 +2,7 @@ import { TogglClientApi } from './toggl-client';
 import { IConfigManager } from './interface/IConfigManager';
 import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
 import { IClientAPI } from './interface/IClientAPI';
+import { Project } from './model/TogglAPI/Project';
 
 export class TogglFacade {
     private client: IClientAPI;
@@ -10,12 +11,11 @@ export class TogglFacade {
     constructor(configManager: IConfigManager) {
         this.configManager = configManager;
         const apiKey = configManager.getValue('API_KEY');
-        const workspaceID = configManager.getValue('WORKSPACE_ID');
-        this.client = new TogglClientApi(apiKey, workspaceID);
+        this.client = new TogglClientApi(apiKey);
     }
 
     async start(taskName: string, projectName: string) {
-        const pid = await this.client.findProjectId(projectName);
+        const pid = await this.findProjectId(projectName);
 
         if (pid) {
             const result = await this.client.startEntry({
@@ -127,13 +127,31 @@ export class TogglFacade {
         return entries;
     }
 
+    async findProjectId(projectName: string) {
+        const workspaceId = parseInt(this.configManager.getValue('WORKSPACE_ID'));
+        const projects = await this.client.getWorkspaceProjects(workspaceId);
+        if (projects) {
+            const proj = projects.find((p) => p.name === projectName) as Project;
+            if (proj) {
+                return proj.id;
+            }
+        }
+        return null;
+    }
+
     async deleteEntry(timeEntryId: number) {
         const result = await this.client.deleteEntry(timeEntryId);
         return result.status === 200;
     }
 
+    async getProjects() {
+        const workspaceId = parseInt(this.configManager.getValue('WORKSPACE_ID'));
+        const projects = await this.client.getWorkspaceProjects(workspaceId);
+        return projects ? projects : [];
+    }
+
     private async restartClient(apiKey = '', workspaceID = 0) {
         await this.stop();
-        this.client = new TogglClientApi(apiKey, workspaceID);
+        this.client = new TogglClientApi(apiKey);
     }
 }

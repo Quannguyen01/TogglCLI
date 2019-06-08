@@ -15,7 +15,7 @@ describe('Toggl API Testing', function() {
         mockConfig = new MockConfig();
         const apiKey = mockConfig.getValue('API_KEY');
         workspaceID = mockConfig.getValue('WORKSPACE_ID');
-        toggl = new TogglClientApi(apiKey, workspaceID);
+        toggl = new TogglClientApi(apiKey);
     });
 
     it('should create a time entry using toggl client api', async function() {
@@ -36,12 +36,6 @@ describe('Toggl API Testing', function() {
         if (result && result.id) {
             entriesToDelete.push(result.id);
         }
-    });
-
-    it('should find a toggl project with specified project name', async function() {
-        const result = await toggl.findProjectId('Toggl CLI');
-        expect(result).to.not.be.null;
-        expect(result).to.be.not.undefined;
     });
 
     it('should start a time entry', async function() {
@@ -141,6 +135,22 @@ describe('Toggl API Testing', function() {
             expect(result.status).equals(200);
         }
 
+    });
+
+    it('should get all the projects from the current workspace', async function() {
+        const projects = await toggl.getWorkspaceProjects(workspaceID);
+        let found = false;
+        if (projects == null) {
+            expect.fail('result should not be null');
+        } else {
+            for (const project of projects) {
+                if (project.name === 'Toggl CLI') {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        expect(found).to.be.true;
     });
 
     after(async function() {
