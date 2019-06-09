@@ -82,8 +82,8 @@ export class TogglClientApi implements IClientAPI {
             const request = this.createRequest(
                 {
                     workspace_id: workspaceId,
-                    since,
-                    until,
+                    since: since.toLocaleDateString(),
+                    until: until.toLocaleDateString(),
                     page,
                     user_agent: 'my-toggl-client',
                 }, true);
