@@ -3,7 +3,7 @@ import { ConfigManager } from '../../src/config-manager';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { existsSync, unlinkSync } from 'fs';
 
-describe('configuration manager', function() {
+export const configTest = describe('configuration manager', function() {
     let config: IConfigManager;
     before(function() {
         config = ConfigManager.initialize('./test/test.yml');
@@ -39,3 +39,5 @@ describe('configuration manager', function() {
         config.setValue('API_KEY', oldValue);
     });
 });
+
+configTest.run();

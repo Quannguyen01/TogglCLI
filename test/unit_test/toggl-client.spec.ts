@@ -5,7 +5,7 @@ import { MockConfig } from '../mock_objects/mock-config';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { IClientAPI } from '../../src/interface/IClientAPI';
 
-describe('Toggl API Testing', function() {
+export const togglCLientTest = describe('Toggl API Testing', function() {
     let toggl: IClientAPI;
     let mockConfig: IConfigManager;
     let workspaceID: number;
@@ -159,3 +159,5 @@ describe('Toggl API Testing', function() {
         });
     });
 });
+
+togglCLientTest.run();

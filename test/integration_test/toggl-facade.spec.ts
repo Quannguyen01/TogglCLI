@@ -7,7 +7,7 @@ function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-describe('Toggl Facade intergration test', function() {
+export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
     const entriesToDelete: number[] = [];
@@ -98,7 +98,7 @@ describe('Toggl Facade intergration test', function() {
     });
 
     it('should get all the time entries for today', async function() {
-        const day = new Date('2019-05-10');
+        const day = new Date();
         const tasks = await toggl.getEntriesForDay(day);
 
         expect(tasks.find((entry) => entry.description === 'Test adding new facade entry'))
@@ -134,3 +134,5 @@ describe('Toggl Facade intergration test', function() {
         entriesToDelete.forEach(async (entry) => await toggl.deleteEntry(entry));
     });
 });
+
+facadeTest.run();
