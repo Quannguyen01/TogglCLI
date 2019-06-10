@@ -54,8 +54,8 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
 
         expect(result.duration).is.not.null;
         if (result.duration) {
-            expect(result.duration < 4 &&
-                result.duration >= 1.5).to.be.true;
+            expect(result.duration).lessThan(4);
+            expect(result.duration).gte(1.2);
         }
         expect(result.description).to.equal('Testing current entry');
 

@@ -4,10 +4,8 @@ import { utilTest } from './unit_test/utils.spec';
 import { facadeTest } from './integration_test/toggl-facade.spec';
 
 describe('Toggl CLI testings', function() {
-    [
-        configTest,
-        togglCLientTest,
-        utilTest,
-        facadeTest,
-    ].forEach((suite) => suite.run());
+    configTest;
+    togglCLientTest;
+    utilTest;
+    facadeTest;
 });
