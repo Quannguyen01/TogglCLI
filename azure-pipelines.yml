@@ -28,6 +28,8 @@ steps:
     secureFile: 'test.yml'
 
 - script: |
+    mv $(Agent.TempDirectory)/.env ./.env
+    mv $(Agent.TempDirectory)/test.yml ./test.yml
     npm run test-prod
   displayName: 'Run tests'
 
