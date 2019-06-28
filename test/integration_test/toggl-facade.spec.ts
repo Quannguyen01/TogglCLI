@@ -2,6 +2,7 @@ import { TogglFacade } from '../../src/toggl-facade';
 import { expect } from 'chai';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { ConfigManager } from '../../src/config-manager';
+import { MockConfig } from '../mock_objects/mock-config';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -13,7 +14,7 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     const entriesToDelete: number[] = [];
 
     before(function() {
-        config = ConfigManager.initialize('./test/test.yml');
+        config = new MockConfig();
     });
 
     beforeEach(function() {
