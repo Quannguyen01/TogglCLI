@@ -6,7 +6,7 @@ import { existsSync, unlinkSync } from 'fs';
 export const configTest = describe('configuration manager', function() {
     let config: IConfigManager;
     before(function() {
-        config = ConfigManager.initialize('./test/test.yml');
+        config = ConfigManager.initialize('test.yml');
     });
 
     it('should generate a new file when it cannot find one', function() {

@@ -3,7 +3,7 @@ import { IConfigManager } from '../../src/interface/IConfigManager';
 
 export class MockConfig implements IConfigManager {
     constructor() {
-        config({path: './test/.env'});
+        config({path: '.env'});
     }
 
     getValue(name: string) {
