@@ -8,7 +8,7 @@
     "test-all": "npm run test test/test.plan.ts",
     "test": "mocha -r ts-node/register",
     "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'",
-    "test-prod": "npm lint && npm run test-all --reporter mocha-junit-reporter",
+    "test-prod": "npm run lint && npm run test-all --reporter mocha-junit-reporter",
     "build": "tsc -p tsconfig.json",
     "package": "pkg ./build/toggl-cli.js --out-path ./release"
   },
