@@ -4,5 +4,6 @@ release
 
 .vscode
 .env
+test-results.xml
 **/**/*.yaml
 **/**/*.yml
