@@ -30,7 +30,7 @@ steps:
 - script: |
     mv $(Agent.TempDirectory)/.env ./.env
     mv $(Agent.TempDirectory)/test.yml ./test.yml
-    npm run test-prod
+    npm test
   displayName: 'Run tests'
 
 - task: PublishTestResults@2
