@@ -37,6 +37,8 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/test-results.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Chai Tests'
 
 - script: |
     npm run build
