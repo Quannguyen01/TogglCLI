@@ -25,7 +25,7 @@ steps:
 
 - task: DownloadSecureFile@1
   inputs:
-    secureFile: 'test.yaml'
+    secureFile: 'test.yml'
 
 - script: |
     npm run test-prod
