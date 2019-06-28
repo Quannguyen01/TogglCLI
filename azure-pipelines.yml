@@ -37,7 +37,6 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/test-results.xml'
-    failTaskOnFailedTests: false
 
 - script: |
     npm run build
