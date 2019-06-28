@@ -17,7 +17,21 @@ steps:
 
 - script: |
     npm install
-    npm test-all
+  displayName: 'Init packages'
+
+- script: |
+    npm run test-prod
+  displayName: 'Run tests'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results.xml'
+    failTaskOnFailedTests: true
+
+- script: |
     npm run build
-    npm run package
-  displayName: 'Build and package'
+    npm run package 
+  displayName: 'Build and Package'
+
+
