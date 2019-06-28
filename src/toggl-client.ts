@@ -4,6 +4,7 @@ import { Project } from './model/TogglAPI/Project';
 import { IClientAPI } from './interface/IClientAPI';
 import { Workspace } from './model/TogglAPI/Workspace';
 import { ReportDetail } from './model/ReportAPI/ReportDetail';
+import { getDatePortion } from './utils';
 
 export class TogglClientApi implements IClientAPI {
     private apiKey: string;
@@ -82,8 +83,8 @@ export class TogglClientApi implements IClientAPI {
             const request = this.createRequest(
                 {
                     workspace_id: workspaceId,
-                    since: since.toLocaleDateString(),
-                    until: until.toLocaleDateString(),
+                    since,
+                    until,
                     page,
                     user_agent: 'my-toggl-client',
                 }, true);
@@ -132,7 +133,8 @@ export class TogglClientApi implements IClientAPI {
             return Axios.create({
                 baseURL: reportAPI ? 'https://www.toggl.com/reports/api/v2' : 'https://www.toggl.com/api/v8',
                 headers: {
-                    'Content-Type': 'application-json',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 auth: {
                     username: apiKey,
