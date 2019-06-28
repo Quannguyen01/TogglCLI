@@ -19,6 +19,14 @@ steps:
     npm install
   displayName: 'Init packages'
 
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: '.env'
+
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'test.yaml'
+
 - script: |
     npm run test-prod
   displayName: 'Run tests'
