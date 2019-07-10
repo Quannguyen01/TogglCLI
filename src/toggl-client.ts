@@ -4,7 +4,6 @@ import { Project } from './model/TogglAPI/Project';
 import { IClientAPI } from './interface/IClientAPI';
 import { Workspace } from './model/TogglAPI/Workspace';
 import { ReportDetail } from './model/ReportAPI/ReportDetail';
-import { getDatePortion } from './utils';
 
 export class TogglClientApi implements IClientAPI {
     private apiKey: string;
@@ -80,16 +79,17 @@ export class TogglClientApi implements IClientAPI {
 
     async getDetailReport(workspaceId: number, since: Date, until: Date, page = 1) {
         try {
-            const request = this.createRequest(
-                {
+            const request = this.createRequest(true);
+
+            const response = await request.get('/details', {
+                params: {
                     workspace_id: workspaceId,
                     since,
                     until,
                     page,
                     user_agent: 'my-toggl-client',
-                }, true);
-
-            const response = await request.get('/details');
+                },
+            });
             return this.extractReportData<ReportDetail>(response);
         } catch (err) {
             this.publishError(err);
@@ -126,7 +126,7 @@ export class TogglClientApi implements IClientAPI {
         }
     }
 
-    private createRequest(params?: object, reportAPI = false): AxiosInstance {
+    private createRequest(reportAPI = false): AxiosInstance {
         const apiKey = this.apiKey;
 
         if (apiKey) {
@@ -140,7 +140,6 @@ export class TogglClientApi implements IClientAPI {
                     username: apiKey,
                     password: 'api_token',
                 },
-                params,
             });
         } else {
             throw new Error('No API key specified');

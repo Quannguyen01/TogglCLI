@@ -22,14 +22,16 @@ steps:
 - task: DownloadSecureFile@1
   inputs:
     secureFile: '.env'
+  name: dotEnv
 
 - task: DownloadSecureFile@1
   inputs:
     secureFile: 'test.yml'
+  name: testConf
 
 - script: |
-    mv $(Agent.TempDirectory)/.env ./.env
-    mv $(Agent.TempDirectory)/test.yml ./test.yml
+    mv $(dotEnv.secureFilePath) ./.env
+    mv $(testConf.secureFilePath) ./test.yml
     npm test
   displayName: 'Run tests'
 
@@ -39,6 +41,7 @@ steps:
     testResultsFiles: '**/test-results.xml'
     failTaskOnFailedTests: true
     testRunTitle: 'Chai Tests'
+  displayName: 'Publish test results'
 
 - script: |
     npm run build
