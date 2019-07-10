@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/quannguyenhongdev/quannguyenhongdev/_apis/build/status/Quannguyen01.TogglCLI?branchName=master)](https://dev.azure.com/quannguyenhongdev/quannguyenhongdev/_build/latest?definitionId=1&branchName=master)
+
 Pre Setup:
 
 `npm install`
