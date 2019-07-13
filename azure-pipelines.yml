@@ -32,7 +32,7 @@ steps:
 - script: |
     mv $(dotEnv.secureFilePath) ./.env
     mv $(testConf.secureFilePath) ./test.yml
-    npm test
+    npm run test-all
   displayName: 'Run tests'
 
 - task: PublishTestResults@2
