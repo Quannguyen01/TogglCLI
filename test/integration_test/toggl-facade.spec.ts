@@ -1,8 +1,8 @@
-import { TogglFacade } from '../../src/toggl-facade';
 import { expect } from 'chai';
+import { TogglFacade } from '../../src/toggl-facade';
 import { IConfigManager } from '../../src/interface/IConfigManager';
-import { ConfigManager } from '../../src/config-manager';
 import { MockConfig } from '../mock_objects/mock-config';
+import { TogglClientApi } from '../../src/toggl-client';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -11,14 +11,16 @@ function sleep(ms: number) {
 export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
+    let client: TogglClientApi;
     const entriesToDelete: number[] = [];
 
     before(function() {
         config = new MockConfig();
+        client = new TogglClientApi();
     });
 
     beforeEach(function() {
-        toggl = new TogglFacade(config);
+        toggl = new TogglFacade(config, client);
     });
 
     it('should start a toggl entry and return a successful object', async function() {

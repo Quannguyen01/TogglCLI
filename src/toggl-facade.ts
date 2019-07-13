@@ -1,4 +1,3 @@
-import { TogglClientApi } from './toggl-client';
 import { IConfigManager } from './interface/IConfigManager';
 import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
 import { IClientAPI } from './interface/IClientAPI';
@@ -8,10 +7,12 @@ export class TogglFacade {
     private client: IClientAPI;
     private configManager: IConfigManager;
 
-    constructor(configManager: IConfigManager) {
+    constructor(configManager: IConfigManager, client: IClientAPI) {
         this.configManager = configManager;
+        this.client = client
+        
         const apiKey = configManager.getValue('API_KEY');
-        this.client = new TogglClientApi(apiKey);
+        client.setApiKey(apiKey);
     }
 
     async start(taskName: string, projectName: string) {
@@ -152,6 +153,6 @@ export class TogglFacade {
 
     private async restartClient(apiKey = '') {
         await this.stop();
-        this.client = new TogglClientApi(apiKey);
+        this.client.setApiKey(apiKey);
     }
 }

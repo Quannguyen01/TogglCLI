@@ -2,10 +2,13 @@ import { Command } from 'commander';
 import { TogglFacade } from './toggl-facade';
 import { makePrettyTimeDuration, getDatePortion, printEntry, padEndSpace, printProject } from './utils';
 import { ConfigManager } from './config-manager';
+import { TogglClientApi } from './toggl-client';
 
 const program = new Command();
 const configManager = ConfigManager.initialize('config.yml');
-const toggl = new TogglFacade(configManager);
+const client = new TogglClientApi();
+
+const toggl = new TogglFacade(configManager, client);
 
 program.version('0.2.0');
 

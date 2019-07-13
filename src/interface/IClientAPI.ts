@@ -4,6 +4,7 @@ import { ReportDetail } from '../model/ReportAPI/ReportDetail';
 import { Project } from '../model/TogglAPI/Project';
 
 export interface IClientAPI {
+    setApiKey(apiKey: string): void;
     createEntry(entry: TimeEntry): Promise<any>;
     startEntry(entry: TimeEntry): Promise<TimeEntry | null>;
     getWorkspaceProjects(workspaceId: number): Promise<Project[] | null>;

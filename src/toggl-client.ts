@@ -6,9 +6,9 @@ import { Workspace } from './model/TogglAPI/Workspace';
 import { ReportDetail } from './model/ReportAPI/ReportDetail';
 
 export class TogglClientApi implements IClientAPI {
-    private apiKey: string;
+    private apiKey: string| undefined;
 
-    constructor(apiKey: string) {
+    setApiKey(apiKey: string) {
         this.apiKey = apiKey;
     }
 
@@ -127,7 +127,7 @@ export class TogglClientApi implements IClientAPI {
     }
 
     private createRequest(reportAPI = false): AxiosInstance {
-        if (this.apiKey) {
+        if (this.apiKey && this.apiKey.length > 0) {
             return Axios.create({
                 baseURL: reportAPI ? 'https://www.toggl.com/reports/api/v2' : 'https://www.toggl.com/api/v8',
                 headers: {
