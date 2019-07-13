@@ -15,7 +15,7 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
         mockConfig = new MockConfig();
         const apiKey = mockConfig.getValue('API_KEY');
         workspaceID = mockConfig.getValue('WORKSPACE_ID');
-        
+
         toggl = new TogglClientApi();
         toggl.setApiKey(apiKey);
     });
