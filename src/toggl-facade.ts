@@ -69,7 +69,7 @@ export class TogglFacade {
 
     async setApiKey(key: string) {
         this.configManager.setValue('API_KEY', key);
-        await this.restartClient(key, this.configManager.getValue('WORKSPACE_ID'));
+        await this.restartClient(key);
     }
 
     async setWorkspace(workspaceName: string) {
@@ -78,7 +78,7 @@ export class TogglFacade {
 
         if (workspace) {
             this.configManager.setValue('WORKSPACE_ID', workspace.id);
-            await this.restartClient(this.configManager.getValue('API_KEY'), workspace.id);
+            await this.restartClient(this.configManager.getValue('API_KEY'));
             return true;
         }
 
@@ -150,7 +150,7 @@ export class TogglFacade {
         return projects ? projects : [];
     }
 
-    private async restartClient(apiKey = '', workspaceID = 0) {
+    private async restartClient(apiKey = '') {
         await this.stop();
         this.client = new TogglClientApi(apiKey);
     }

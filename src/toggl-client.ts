@@ -127,9 +127,7 @@ export class TogglClientApi implements IClientAPI {
     }
 
     private createRequest(reportAPI = false): AxiosInstance {
-        const apiKey = this.apiKey;
-
-        if (apiKey) {
+        if (this.apiKey) {
             return Axios.create({
                 baseURL: reportAPI ? 'https://www.toggl.com/reports/api/v2' : 'https://www.toggl.com/api/v8',
                 headers: {
@@ -137,7 +135,7 @@ export class TogglClientApi implements IClientAPI {
                     'Accept': 'application/json',
                 },
                 auth: {
-                    username: apiKey,
+                    username: this.apiKey,
                     password: 'api_token',
                 },
             });
