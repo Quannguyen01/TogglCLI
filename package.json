@@ -10,7 +10,7 @@
     "lint": "tslint **/**/*.ts --exclude 'node_modules/**/*.{j,t}s'",
     "test": "npm run lint && mocha -r ts-node/register test/test.plan.ts --reporter mocha-junit-reporter",
     "build": "tsc -p tsconfig.json",
-    "package": "pkg ./build/toggl-cli.js"
+    "package": "pkg ./build/toggl-cli.js --out-path"
   },
   "author": "",
   "license": "ISC",

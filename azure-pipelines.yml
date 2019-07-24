@@ -45,7 +45,7 @@ steps:
 
 - script: |
     npm run build
-    npm run package --out-path $(Build.ArtifactStagingDirectory)/release
+    npm run package $(Build.ArtifactStagingDirectory)/release
   displayName: 'Build and Package'
 
 - task: PublishBuildArtifacts@1
