@@ -53,5 +53,5 @@ steps:
   condition: succeeded()
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/release'
-    ArtifactName: 'drop'
+    ArtifactName: 'TogglCLI'
     publishLocation: 'Container'
