@@ -45,7 +45,13 @@ steps:
 
 - script: |
     npm run build
-    npm run package 
+    npm run package --out-path $(Build.ArtifactStagingDirectory)/release
   displayName: 'Build and Package'
 
-
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  condition: suceeded()
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/release'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
