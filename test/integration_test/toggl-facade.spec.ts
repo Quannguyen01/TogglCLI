@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { TogglFacade } from '../../src/toggl-facade';
 import { IConfigManager } from '../../src/interface/IConfigManager';
-import { MockConfig } from '../mock_objects/mock-config';
-import { TogglClientApi } from '../../src/toggl-client';
+import { FakeConfig } from '../mock-object/fake-config';
+import { FakeClientApi } from '../mock-object/fake-client-api';
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -11,12 +11,12 @@ function sleep(ms: number) {
 export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
-    let client: TogglClientApi;
+    let client: FakeClientApi;
     const entriesToDelete: number[] = [];
 
     before(function() {
-        config = new MockConfig();
-        client = new TogglClientApi();
+        config = new FakeConfig();
+        client = new FakeClientApi();
     });
 
     beforeEach(function() {
@@ -26,25 +26,13 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     it('should start a toggl entry and return a successful object', async function() {
         const result = await toggl.start('Test adding new facade entry', 'Toggl CLI');
         expect(result.description).to.equal('Test adding new facade entry');
-
-        if (result && result.id) {
-            entriesToDelete.push(result.id);
-        }
     });
 
     it('should stop a toggl entry that is currently running', async function() {
-        this.timeout(4000);
-
         const entry = await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
-
-        await sleep(2000);
-
         const result = await toggl.stop();
-        expect(result).to.greaterThan(0);
 
-        if (entry && entry.id) {
-            entriesToDelete.push(entry.id);
-        }
+        expect(result).to.greaterThan(200);
     });
 
     it('should display the name and duration of the task', async function() {

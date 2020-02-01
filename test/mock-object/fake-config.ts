@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 
-export class MockConfig implements IConfigManager {
+export class FakeConfig implements IConfigManager {
     constructor() {
         config({path: '.env'});
     }

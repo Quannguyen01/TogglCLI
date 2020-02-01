@@ -1,7 +1,7 @@
 import { TogglClientApi } from '../../src/toggl-client';
 import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
 import { expect } from 'chai';
-import { MockConfig } from '../mock_objects/mock-config';
+import { FakeConfig } from '../mock-object/fake-config';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { IClientAPI } from '../../src/interface/IClientAPI';
 
@@ -12,7 +12,7 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
     const entriesToDelete: number[] = [];
 
     before(function() {
-        mockConfig = new MockConfig();
+        mockConfig = new FakeConfig();
         const apiKey = mockConfig.getValue('API_KEY');
         workspaceID = mockConfig.getValue('WORKSPACE_ID');
 
