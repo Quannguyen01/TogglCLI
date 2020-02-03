@@ -4,10 +4,6 @@ import { IConfigManager } from '../../src/interface/IConfigManager';
 import { FakeConfig } from '../mock-object/fake-config';
 import { FakeClientApi } from '../mock-object/fake-client-api';
 
-function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
@@ -29,29 +25,21 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     });
 
     it('should stop a toggl entry that is currently running', async function() {
-        const entry = await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
+        await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
         const result = await toggl.stop();
 
-        expect(result).to.greaterThan(200);
+        expect(result).to.equal(200);
     });
 
     it('should display the name and duration of the task', async function() {
-        this.timeout(4000);
-
-        const entry = await toggl.start('Testing current entry', 'Toggl CLI');
-        await sleep(2500);
+        await toggl.start('Testing current entry', 'Toggl CLI');
 
         const result = await toggl.current();
 
         expect(result.duration).is.not.null;
         if (result.duration) {
-            expect(result.duration).lessThan(4);
-            expect(result.duration).gte(1.2);
-        }
-        expect(result.description).to.equal('Testing current entry');
-
-        if (entry && entry.id) {
-            entriesToDelete.push(entry.id);
+            expect(result.duration).to.equal(10);
+            expect(result.description).to.equal('Testing current entry');
         }
     });
 
@@ -78,7 +66,7 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
 
             await toggl.setWorkspace(oldWorkspace.name);
         } else {
-            this.skip();
+            expect.fail();
         }
     });
 
@@ -119,10 +107,6 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     it('should list all the projects available in the current workspace', async function() {
         const result = await toggl.getProjects();
         expect(result.length).not.equal(0);
-    });
-
-    after(async function() {
-        entriesToDelete.forEach(async (entry) => await toggl.deleteEntry(entry));
     });
 });
 
