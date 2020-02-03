@@ -4,8 +4,7 @@ import { Project } from '../../src/model/TogglAPI/Project';
 import { Workspace } from '../../src/model/TogglAPI/Workspace';
 import { ReportDetail } from '../../src/model/ReportAPI/ReportDetail';
 
-export class FakeClientApi implements IClientAPI
-{
+export class FakeClientApi implements IClientAPI {
     private currentEntry: TimeEntry;
     private apiKey: string;
 
@@ -13,24 +12,24 @@ export class FakeClientApi implements IClientAPI
         this.currentEntry = {
             id: 1,
             description: 'testing task',
-            created_with: 'testing'
+            created_with: 'testing',
         };
         this.apiKey = '';
     }
 
     setApiKey(apiKey: string): void {
         this.apiKey = apiKey;
-    }    
-    
+    }
+
     async createEntry(entry: TimeEntry): Promise<any> {
         this.currentEntry = entry;
-        this.currentEntry.id = 1
+        this.currentEntry.id = 1;
         return this.currentEntry;
     }
 
     async startEntry(entry: TimeEntry): Promise<TimeEntry> {
         this.currentEntry = entry;
-        this.currentEntry.id = 1
+        this.currentEntry.id = 1;
         return this.currentEntry;
     }
 
@@ -42,7 +41,7 @@ export class FakeClientApi implements IClientAPI
                 wid: 1,
                 name: 'Toggl CLI',
             },
-        ]
+        ];
     }
 
     async getCurrent(): Promise<TimeEntry> {
@@ -67,12 +66,12 @@ export class FakeClientApi implements IClientAPI
                 name: 'Toggl CLI Test',
                 premium: false,
                 admin: false,
-            }
-        ]
+            },
+        ];
     }
 
     async getDetailReport(workspaceId: number, since: Date, until: Date, page: number): Promise<ReportDetail> {
-        if (page == 1) {
+        if (page === 1) {
             return {
                 total_grand: 1000,
                 total_count: 2,
@@ -87,15 +86,15 @@ export class FakeClientApi implements IClientAPI
                         uid: 2,
                         description: 'Testing',
                         use_stop: false,
-                    }
-                ]
+                    },
+                ],
             };
         } else {
             return {
                 total_grand: 1000,
                 total_count: 2,
                 per_page: 2,
-                data: []
+                data: [],
             };
         }
     }

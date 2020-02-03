@@ -107,9 +107,9 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
 
     it('should get report detail for today for standard workspace', async function() {
         const fromDate = new Date();
-        fromDate.setHours(0,0,0)
+        fromDate.setHours(0, 0, 0);
         const toDate = new Date();
-        toDate.setHours(23,59,59);
+        toDate.setHours(23, 59, 59);
         const page = 1;
 
         const details = await toggl.getDetailReport(workspaceID, fromDate, toDate, page);
