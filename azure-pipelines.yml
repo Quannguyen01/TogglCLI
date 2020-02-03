@@ -32,16 +32,16 @@ steps:
 - script: |
     mv $(dotEnv.secureFilePath) ./.env
     mv $(testConf.secureFilePath) ./test.yml
-    npm run test
+    npm test
   displayName: 'Run tests'
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/test-results.xml'
-    failTaskOnFailedTests: true
-    testRunTitle: 'Chai Tests'
-  displayName: 'Publish test results'
+# - task: PublishTestResults@2
+#   inputs:
+#     testResultsFormat: 'JUnit'
+#     testResultsFiles: '**/test-results.xml'
+#     failTaskOnFailedTests: true
+#     testRunTitle: 'Chai Tests'
+#   displayName: 'Publish test results'
 
 - script: |
     npm run build
