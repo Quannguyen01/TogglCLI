@@ -19,6 +19,10 @@ steps:
     npm ci
   displayName: 'Init packages'
 
+- script: |
+    npm install --only=dev
+  displayName: 'Install dev dependency'
+
 - task: DownloadSecureFile@1
   inputs:
     secureFile: '.env'
@@ -35,13 +39,13 @@ steps:
     npm test
   displayName: 'Run tests'
 
-# - task: PublishTestResults@2
-#   inputs:
-#     testResultsFormat: 'JUnit'
-#     testResultsFiles: '**/test-results.xml'
-#     failTaskOnFailedTests: true
-#     testRunTitle: 'Chai Tests'
-#   displayName: 'Publish test results'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Chai Tests'
+  displayName: 'Publish test results'
 
 - script: |
     npm run build
