@@ -1,12 +1,22 @@
 import Axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { TimeEntry } from './model/TogglAPI/TimeEntry';
-import { Project } from './model/TogglAPI/Project';
-import { IClientAPI } from './interface/IClientAPI';
-import { Workspace } from './model/TogglAPI/Workspace';
-import { ReportDetail } from './model/ReportAPI/ReportDetail';
+import TimeEntry from './model/TogglAPI/TimeEntry';
+import Project from './model/TogglAPI/Project';
+import IClientAPI from './interface/IClientAPI';
+import Workspace from './model/TogglAPI/Workspace';
+import ReportDetail from './model/ReportAPI/ReportDetail';
+import ILog from './interface/ILog';
 
-export class TogglClientApi implements IClientAPI {
-    private apiKey: string| undefined;
+export default class TogglClientApi implements IClientAPI {
+    private apiKey: string | undefined;
+    private logger: ILog;
+
+    constructor(logger: ILog, apiKey: string = '') {
+        this.logger = logger;
+        
+        if (apiKey !== '') {
+            this.apiKey = apiKey;
+        }
+    }
 
     setApiKey(apiKey: string) {
         this.apiKey = apiKey;
@@ -133,9 +143,9 @@ export class TogglClientApi implements IClientAPI {
 
     private publishError(error: any) {
         if (error.response) {
-            console.log(`${error.response.status}-${error.response.statusText}`);
+            this.logger.publish(`${error.response.status}-${error.response.statusText}`);
         } else if (error instanceof Error) {
-            console.log(`${error.message}`);
+            this.logger.publish(`${error.message}`);
         }
     }
 

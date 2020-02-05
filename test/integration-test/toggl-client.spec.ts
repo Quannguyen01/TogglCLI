@@ -1,9 +1,10 @@
-import { TogglClientApi } from '../../src/toggl-client';
-import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
+import TogglClientApi from '../../src/toggl-client';
+import TimeEntry from '../../src/model/TogglAPI/TimeEntry';
 import { expect } from 'chai';
-import { IConfigManager } from '../../src/interface/IConfigManager';
-import { IClientAPI } from '../../src/interface/IClientAPI';
-import { ConfigManager } from '../../src/config-manager';
+import IConfigManager from '../../src/interface/IConfigManager';
+import IClientAPI from '../../src/interface/IClientAPI';
+import ConfigManager from '../../src/config-manager';
+import LogConsole from '../../src/log-console';
 
 export const togglCLientTest = describe('Toggl API Testing', function() {
     let toggl: IClientAPI;
@@ -16,8 +17,7 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
         const apiKey = config.getValue('API_KEY');
         workspaceID = config.getValue('WORKSPACE_ID');
 
-        toggl = new TogglClientApi();
-        toggl.setApiKey(apiKey);
+        toggl = new TogglClientApi(new LogConsole(), apiKey);
     });
 
     it('should create a time entry using toggl client api', async function() {

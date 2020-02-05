@@ -1,4 +1,4 @@
-export interface TimeEntry {
+export default interface TimeEntry {
     id?: number;
     description: string;
     wid?: number;

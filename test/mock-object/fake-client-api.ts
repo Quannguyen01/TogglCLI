@@ -1,10 +1,10 @@
-import { IClientAPI } from '../../src/interface/IClientAPI';
-import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
-import { Project } from '../../src/model/TogglAPI/Project';
-import { Workspace } from '../../src/model/TogglAPI/Workspace';
-import { ReportDetail } from '../../src/model/ReportAPI/ReportDetail';
+import IClientAPI from '../../src/interface/IClientAPI';
+import TimeEntry from '../../src/model/TogglAPI/TimeEntry';
+import Project from '../../src/model/TogglAPI/Project';
+import Workspace from '../../src/model/TogglAPI/Workspace';
+import ReportDetail from '../../src/model/ReportAPI/ReportDetail';
 
-export class FakeClientApi implements IClientAPI {
+export default class FakeClientApi implements IClientAPI {
     private currentEntry: TimeEntry;
     private apiKey: string;
 

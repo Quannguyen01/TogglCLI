@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { parseDocument, stringify } from 'yaml';
-import { IConfigManager } from './interface/IConfigManager';
+import IConfigManager from './interface/IConfigManager';
 
-export class ConfigManager implements IConfigManager {
+export default class ConfigManager implements IConfigManager {
     static initialize(configPath: string = '') {
         function getConfigData(path: string) {
             const values = new Map<string, any>();

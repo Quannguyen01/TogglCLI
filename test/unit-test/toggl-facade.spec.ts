@@ -1,14 +1,13 @@
 import { expect } from 'chai';
-import { TogglFacade } from '../../src/toggl-facade';
-import { IConfigManager } from '../../src/interface/IConfigManager';
-import { FakeConfig } from '../mock-object/fake-config';
-import { FakeClientApi } from '../mock-object/fake-client-api';
+import TogglFacade from '../../src/toggl-facade';
+import IConfigManager from '../../src/interface/IConfigManager';
+import FakeConfig from '../mock-object/fake-config';
+import FakeClientApi from '../mock-object/fake-client-api';
 
 export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
     let client: FakeClientApi;
-    const entriesToDelete: number[] = [];
 
     before(function() {
         config = new FakeConfig();

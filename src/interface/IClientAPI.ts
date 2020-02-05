@@ -1,9 +1,9 @@
-import { TimeEntry } from '../model/TogglAPI/TimeEntry';
-import { Workspace } from '../model/TogglAPI/Workspace';
-import { ReportDetail } from '../model/ReportAPI/ReportDetail';
-import { Project } from '../model/TogglAPI/Project';
+import TimeEntry from '../model/TogglAPI/TimeEntry';
+import Workspace from '../model/TogglAPI/Workspace';
+import ReportDetail from '../model/ReportAPI/ReportDetail';
+import Project from '../model/TogglAPI/Project';
 
-export interface IClientAPI {
+export default interface IClientAPI {
     setApiKey(apiKey: string): void;
     createEntry(entry: TimeEntry): Promise<any>;
     startEntry(entry: TimeEntry): Promise<TimeEntry | null>;

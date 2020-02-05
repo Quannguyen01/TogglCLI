@@ -1,4 +1,4 @@
-export interface ReportTimeEntry {
+export default interface ReportTimeEntry {
     id?: number;
     wid?: number;
     pid?: number;

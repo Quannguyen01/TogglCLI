@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { ConfigManager } from '../../src/config-manager';
-import { IConfigManager } from '../../src/interface/IConfigManager';
+import ConfigManager from '../../src/config-manager';
+import IConfigManager from '../../src/interface/IConfigManager';
 import { existsSync, unlinkSync } from 'fs';
 
 export const configTest = describe('configuration manager', function() {

@@ -1,4 +1,4 @@
-export interface Project {
+export default interface Project {
     id?: number;
     pid?: number;
     name: string;

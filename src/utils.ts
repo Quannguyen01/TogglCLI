@@ -1,6 +1,7 @@
-import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
-import { arrayZipWith } from './listFunctional';
-import { Project } from './model/TogglAPI/Project';
+import ReportTimeEntry from './model/ReportAPI/ReportTimeEntry';
+import { arrayZipWith } from './list-functional';
+import Project from './model/TogglAPI/Project';
+import ILog from './interface/ILog';
 
 function padZeroes(num: any, numZero: number) {
     return num.toString().padStart(numZero, '0');
@@ -40,7 +41,7 @@ export function getTimePortion(date: Date) {
     return `${hour}:${minute}:${second}`;
 }
 
-export function printEntry(entry: ReportTimeEntry) {
+export function toStringEntry(entry: ReportTimeEntry): string {
     const entryOutput = [
         entry.id ? entry.id.toString() : '',
         entry.description,
@@ -50,18 +51,14 @@ export function printEntry(entry: ReportTimeEntry) {
         entry.dur ? makePrettyTimeDuration(entry.dur / 1000) : '00:00:00',
     ];
 
-    const output = arrayZipWith(padEndSpace, entryOutput, [12, 40, 20, 12, 12, 12]).join(' | ');
-
-    console.log(output);
+    return arrayZipWith(padEndSpace, entryOutput, [12, 40, 20, 12, 12, 12]).join(' | ');
 }
 
-export function printProject(project: Project) {
+export function toStringProject(project: Project): string {
     const projectOutput = [
         project.name,
         project.active ? 'active' : 'inactive',
     ];
 
-    const output = arrayZipWith(padEndSpace, projectOutput, [30, 10]).join(' | ');
-
-    console.log(output);
+    return arrayZipWith(padEndSpace, projectOutput, [30, 10]).join(' | ');
 }

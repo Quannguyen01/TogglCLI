@@ -1,4 +1,4 @@
-export interface Workspace {
+export default interface Workspace {
     id?: number;
     name: string;
     premium: boolean;

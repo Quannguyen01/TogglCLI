@@ -1,31 +1,33 @@
 import { Command } from 'commander';
-import { TogglFacade } from './toggl-facade';
-import { makePrettyTimeDuration, getDatePortion, printEntry, padEndSpace, printProject } from './utils';
-import { ConfigManager } from './config-manager';
-import { TogglClientApi } from './toggl-client';
+import TogglFacade from './toggl-facade';
+import { makePrettyTimeDuration, getDatePortion, toStringEntry, padEndSpace, toStringProject } from './utils';
+import ConfigManager from './config-manager';
+import TogglClientApi from './toggl-client';
+import LogConsole from './log-console';
 
 const program = new Command();
 const configManager = ConfigManager.initialize('config.yml');
-const client = new TogglClientApi();
+const logger = new LogConsole();
+const client = new TogglClientApi(logger);
 
 const toggl = new TogglFacade(configManager, client);
 
-program.version('0.2.0');
+program.version('0.2.1');
 
 program
     .command('start <taskName>')
     .description('Start a task')
     .option('-p, --project <projectName>', 'project for the task')
-    .action(async (taskName, cmd) => {
+    .action(async (taskName: string, cmd: any) => {
         if (cmd.project) {
             const result = await toggl.start(taskName, cmd.project);
             if (result.description != null) {
-                console.log(`Task ${taskName} has succesfully started!`);
+                logger.publish(`Task ${taskName} has succesfully started!`);
             } else {
-                console.log(`Task ${taskName} has failed to start.`);
+                logger.publish(`Task ${taskName} has failed to start.`);
             }
         } else {
-            console.log('Please specified a project');
+            logger.publish('Please specified a project');
         }
     });
 
@@ -35,9 +37,9 @@ program
     .action(async () => {
         const result = await toggl.stop();
         if (result) {
-            console.log(`Current task stopped succesfully!\nTask duration: ${makePrettyTimeDuration(result)}`);
+            logger.publish(`Current task stopped succesfully!\nTask duration: ${makePrettyTimeDuration(result)}`);
         } else {
-            console.log('Failed to stop task');
+            logger.publish('Failed to stop task');
         }
     });
 
@@ -47,38 +49,38 @@ program
     .action(async () => {
         const result = await toggl.current();
         if (result.description && result.duration) {
-            console.log(`Current task: ${result.description}\nDuration: ${makePrettyTimeDuration(result.duration)}`);
+            logger.publish(`Current task: ${result.description}\nDuration: ${makePrettyTimeDuration(result.duration)}`);
         } else {
-            console.log('No current task is found!');
+            logger.publish('No current task is found!');
         }
     });
 
 program
     .command('auth_token <apiKey>')
     .description('Setup authorization key')
-    .action((apiKey) => {
+    .action((apiKey: string) => {
         toggl.setApiKey(apiKey);
     });
 
 program
     .command('workspace [workspaceName]')
     .description('Setup active workspace to a specific. List available workspaces if no workspace is provided.')
-    .action(async (workspaceName) => {
+    .action(async (workspaceName: string) => {
         if (workspaceName) {
             if (!await toggl.setWorkspace(workspaceName)) {
-                console.log(`Workspace ${workspaceName} not found`);
+                logger.publish(`Workspace ${workspaceName} not found`);
             } else {
-                console.log(`Switched to ${workspaceName}.`);
+                logger.publish(`Switched to ${workspaceName}.`);
             }
         } else {
             const workspaces = await toggl.getWorkspaces();
-            console.log('Available workspaces:');
+            logger.publish('Available workspaces:');
             for (const workspace of workspaces) {
                 const outString = `* ${workspace.name}` +
                         (workspace.isCurrent ? ' <-- current workspace' : '');
-                console.log(outString);
+                logger.publish(outString);
             }
-            console.log('Type workspace <workspace_id> if you want to swap workspace');
+            logger.publish('Type workspace <workspace_id> if you want to swap workspace');
         }
     });
 
@@ -91,18 +93,20 @@ program
         const header = `${padEndSpace('Entry ID', 12)} | ${padEndSpace('Entry', 40)} ` +
                         `| ${padEndSpace('Project', 20)} | ${padEndSpace('Start', 12)} | ${padEndSpace('End', 12)} ` +
                         `| ${padEndSpace('Duration', 12)}`;
-        console.log(header);
-        entries.forEach(printEntry);
+        logger.publish(header);
+        entries.forEach(entry => {
+            logger.publish(toStringEntry(entry));
+        });
     });
 
 program
     .command('delete <timeEntryId>')
     .description('Delete a time entry')
-    .action(async (timeEntryId) => {
+    .action(async (timeEntryId: number) => {
         if (await toggl.deleteEntry(timeEntryId)) {
-            console.log('Entry deleted successfully!');
+            logger.publish('Entry deleted successfully!');
         } else {
-            console.log('Errors while deleting the entry.');
+            logger.publish('Errors while deleting the entry.');
         }
     });
 
@@ -111,7 +115,9 @@ program
     .description('List all projects in available workspace')
     .action(async () => {
         const projects = await toggl.getProjects();
-        projects.forEach(printProject);
+        projects.forEach(project => {
+            logger.publish(toStringProject(project));
+        });
     });
 
 program.parse(process.argv);

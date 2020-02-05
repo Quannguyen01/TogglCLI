@@ -1,15 +1,15 @@
-import { IConfigManager } from './interface/IConfigManager';
-import { ReportTimeEntry } from './model/ReportAPI/ReportTimeEntry';
-import { IClientAPI } from './interface/IClientAPI';
-import { Project } from './model/TogglAPI/Project';
+import IConfigManager from './interface/IConfigManager';
+import ReportTimeEntry from './model/ReportAPI/ReportTimeEntry';
+import IClientAPI from './interface/IClientAPI';
+import Project from './model/TogglAPI/Project';
 
-export class TogglFacade {
+export default class TogglFacade {
     private client: IClientAPI;
     private configManager: IConfigManager;
 
     constructor(configManager: IConfigManager, client: IClientAPI) {
         this.configManager = configManager;
-        this.client = client
+        this.client = client;
         
         const apiKey = configManager.getValue('API_KEY');
         client.setApiKey(apiKey);

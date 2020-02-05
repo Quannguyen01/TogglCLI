@@ -1,6 +1,6 @@
-import { ReportTimeEntry } from './ReportTimeEntry';
+import ReportTimeEntry from './ReportTimeEntry';
 
-export interface ReportDetail {
+export default interface ReportDetail {
     total_grand: number;
     total_billabe?: number;
     total_count: number;
