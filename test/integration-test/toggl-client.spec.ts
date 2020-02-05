@@ -1,20 +1,20 @@
 import { TogglClientApi } from '../../src/toggl-client';
 import { TimeEntry } from '../../src/model/TogglAPI/TimeEntry';
 import { expect } from 'chai';
-import { MockConfig } from '../mock_objects/mock-config';
 import { IConfigManager } from '../../src/interface/IConfigManager';
 import { IClientAPI } from '../../src/interface/IClientAPI';
+import { ConfigManager } from '../../src/config-manager';
 
 export const togglCLientTest = describe('Toggl API Testing', function() {
     let toggl: IClientAPI;
-    let mockConfig: IConfigManager;
+    let config: IConfigManager;
     let workspaceID: number;
     const entriesToDelete: number[] = [];
 
     before(function() {
-        mockConfig = new MockConfig();
-        const apiKey = mockConfig.getValue('API_KEY');
-        workspaceID = mockConfig.getValue('WORKSPACE_ID');
+        config = ConfigManager.initialize('test.yml');
+        const apiKey = config.getValue('API_KEY');
+        workspaceID = config.getValue('WORKSPACE_ID');
 
         toggl = new TogglClientApi();
         toggl.setApiKey(apiKey);
@@ -25,9 +25,9 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
             description: 'Meeting with possible client',
             tags: ['billed'],
             duration: 1200,
-            start: new Date('2013-03-05T07:58:58.000Z'),
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
-            created_with: mockConfig.getValue('APP_NAME') || '',
+            start: new Date(),
+            pid: parseInt(config.getValue('PROJECT_TEST_ID')) || 0,
+            created_with: config.getValue('APP_NAME') || '',
         };
 
         const result = await toggl.createEntry(entry);
@@ -44,54 +44,55 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
         const entry: TimeEntry = {
             description: 'Testing starting time entry from Toggl client',
             tags: ['dev'],
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
-            created_with: mockConfig.getValue('APP_NAME') || '',
+            pid: parseInt(config.getValue('PROJECT_TEST_ID')) || 0,
+            created_with: config.getValue('APP_NAME') || '',
         };
 
         const result = await toggl.startEntry(entry);
 
         if (result) {
             expect(result.description).to.equal(entry.description);
+            if (result.id) {
+                entriesToDelete.push(result.id);
+            }
         } else {
             expect.fail('Failed to start time entry');
-        }
-
-        if (result && result.id) {
-            entriesToDelete.push(result.id);
         }
     });
 
     it('should get the current running entry from toggl', async function() {
         await toggl.startEntry({
             description: 'Testing adding new entry to get current',
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
-            created_with: mockConfig.getValue('APP_NAME') || '',
+            pid: parseInt(config.getValue('PROJECT_TEST_ID')) || 0,
+            created_with: config.getValue('APP_NAME') || '',
         });
 
         const result = await toggl.getCurrent();
 
-        if (result) {
+        if (result && result.id) {
             expect(result.description).to.equal('Testing adding new entry to get current');
+            entriesToDelete.push(result.id);
         } else {
-            this.skip();
+            expect.fail('Cannot get current task');
         }
     });
 
     it('should stop the current running entry in toggl', async function() {
         const runningEntry = await toggl.startEntry({
             description: 'Testing adding new entry to stop',
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID'), 0),
-            created_with: mockConfig.getValue('APP_NAME') || '',
+            pid: parseInt(config.getValue('PROJECT_TEST_ID'), 0),
+            created_with: config.getValue('APP_NAME') || '',
         });
 
         const entryId = runningEntry && runningEntry.id ? runningEntry.id : -1;
         const result = await toggl.stopEntry(entryId);
 
-        if (result) {
+        if (result && result.id) {
             expect(result.description).to.equal('Testing adding new entry to stop');
             expect(result.id).to.equal(entryId);
+            entriesToDelete.push(result.id);
         } else {
-            this.skip();
+            expect.fail('Failed to stop current entry');
         }
     });
 
@@ -99,15 +100,18 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
         const workspaces = await toggl.getWorkspaces();
         expect(workspaces).to.not.empty;
 
-        const currentWorkspace = parseInt(mockConfig.getValue('WORKSPACE_ID')) || 0;
+        const currentWorkspace = parseInt(config.getValue('WORKSPACE_ID')) || 0;
         const workspaceIDs = workspaces.map((w) => w.id);
         expect(workspaceIDs).includes(currentWorkspace);
     });
 
     it('should get report detail for today for standard workspace', async function() {
         const fromDate = new Date();
+        fromDate.setHours(0, 0, 0);
         const toDate = new Date();
+        toDate.setHours(23, 59, 59);
         const page = 1;
+
         const details = await toggl.getDetailReport(workspaceID, fromDate, toDate, page);
 
         if (details != null) {
@@ -123,8 +127,8 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
         const entry: TimeEntry = {
             description: 'Testing delete',
             tags: ['dev'],
-            pid: parseInt(mockConfig.getValue('PROJECT_TEST_ID')) || 0,
-            created_with: mockConfig.getValue('APP_NAME') || '',
+            pid: parseInt(config.getValue('PROJECT_TEST_ID')) || 0,
+            created_with: config.getValue('APP_NAME') || '',
         };
 
         const createdResult = await toggl.startEntry(entry);
@@ -156,8 +160,8 @@ export const togglCLientTest = describe('Toggl API Testing', function() {
     });
 
     after(async function() {
-        entriesToDelete.forEach(async (entry) => {
-            await toggl.deleteEntry(entry);
+        entriesToDelete.forEach(async (entryId) => {
+            await toggl.deleteEntry(entryId);
         });
     });
 });

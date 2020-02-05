@@ -50,7 +50,9 @@ export class TogglClientApi implements IClientAPI {
     async getCurrent() {
         try {
             const response = await this.createRequest().get('/time_entries/current');
-            return this.extractData<TimeEntry>(response);
+            let timeEntry = this.extractData<TimeEntry>(response);
+            timeEntry.duration = this.calculateDuration(timeEntry.start);
+            return timeEntry;
         } catch (err) {
             this.publishError(err);
             return null;
@@ -103,6 +105,17 @@ export class TogglClientApi implements IClientAPI {
         } catch (err) {
             this.publishError(err);
             return err.response;
+        }
+    }
+    
+    private calculateDuration(startTime?: Date) {
+        const MILISECOND = 1000;
+
+        if (startTime) {
+            return ((new Date()).getTime() - (new Date(startTime)).getTime()) / MILISECOND;
+        }
+        else {
+            return 0;
         }
     }
 

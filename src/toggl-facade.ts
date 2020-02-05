@@ -51,21 +51,14 @@ export class TogglFacade {
     }
 
     async current() {
-        const MILISECOND = 1000;
         const currentTask = await this.client.getCurrent();
-
-        if (currentTask && currentTask.at && currentTask.start) {
-            const duration = ((new Date()).getTime() - (new Date(currentTask.start)).getTime()) / MILISECOND;
-            return {
-                description: currentTask.description,
-                duration,
-            };
-        } else {
-            return {
+        return currentTask ? currentTask : 
+            {
+                id: null,
+                pid: null,
                 description: null,
                 duration: null,
             };
-        }
     }
 
     async setApiKey(key: string) {

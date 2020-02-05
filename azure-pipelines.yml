@@ -19,6 +19,10 @@ steps:
     npm ci
   displayName: 'Init packages'
 
+- script: |
+    npm install --only=dev
+  displayName: 'Install dev dependency'
+
 - task: DownloadSecureFile@1
   inputs:
     secureFile: '.env'
@@ -32,7 +36,7 @@ steps:
 - script: |
     mv $(dotEnv.secureFilePath) ./.env
     mv $(testConf.secureFilePath) ./test.yml
-    npm run test
+    npm test
   displayName: 'Run tests'
 
 - task: PublishTestResults@2

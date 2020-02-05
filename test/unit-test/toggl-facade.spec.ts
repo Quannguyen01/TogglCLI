@@ -1,22 +1,18 @@
 import { expect } from 'chai';
 import { TogglFacade } from '../../src/toggl-facade';
 import { IConfigManager } from '../../src/interface/IConfigManager';
-import { MockConfig } from '../mock_objects/mock-config';
-import { TogglClientApi } from '../../src/toggl-client';
-
-function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { FakeConfig } from '../mock-object/fake-config';
+import { FakeClientApi } from '../mock-object/fake-client-api';
 
 export const facadeTest = describe('Toggl Facade intergration test', function() {
     let config: IConfigManager;
     let toggl: TogglFacade;
-    let client: TogglClientApi;
+    let client: FakeClientApi;
     const entriesToDelete: number[] = [];
 
     before(function() {
-        config = new MockConfig();
-        client = new TogglClientApi();
+        config = new FakeConfig();
+        client = new FakeClientApi();
     });
 
     beforeEach(function() {
@@ -26,44 +22,24 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     it('should start a toggl entry and return a successful object', async function() {
         const result = await toggl.start('Test adding new facade entry', 'Toggl CLI');
         expect(result.description).to.equal('Test adding new facade entry');
-
-        if (result && result.id) {
-            entriesToDelete.push(result.id);
-        }
     });
 
     it('should stop a toggl entry that is currently running', async function() {
-        this.timeout(4000);
-
-        const entry = await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
-
-        await sleep(2000);
-
+        await toggl.start('Test adding/stopping new entry from facade', 'Toggl CLI');
         const result = await toggl.stop();
-        expect(result).to.greaterThan(0);
 
-        if (entry && entry.id) {
-            entriesToDelete.push(entry.id);
-        }
+        expect(result).to.equal(200);
     });
 
     it('should display the name and duration of the task', async function() {
-        this.timeout(4000);
-
-        const entry = await toggl.start('Testing current entry', 'Toggl CLI');
-        await sleep(2500);
+        await toggl.start('Testing current entry', 'Toggl CLI');
 
         const result = await toggl.current();
 
         expect(result.duration).is.not.null;
         if (result.duration) {
-            expect(result.duration).lessThan(4);
-            expect(result.duration).gte(1.2);
-        }
-        expect(result.description).to.equal('Testing current entry');
-
-        if (entry && entry.id) {
-            entriesToDelete.push(entry.id);
+            expect(result.duration).to.equal(10);
+            expect(result.description).to.equal('Testing current entry');
         }
     });
 
@@ -90,7 +66,7 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
 
             await toggl.setWorkspace(oldWorkspace.name);
         } else {
-            this.skip();
+            expect.fail();
         }
     });
 
@@ -131,10 +107,6 @@ export const facadeTest = describe('Toggl Facade intergration test', function() 
     it('should list all the projects available in the current workspace', async function() {
         const result = await toggl.getProjects();
         expect(result.length).not.equal(0);
-    });
-
-    after(async function() {
-        entriesToDelete.forEach(async (entry) => await toggl.deleteEntry(entry));
     });
 });
 
